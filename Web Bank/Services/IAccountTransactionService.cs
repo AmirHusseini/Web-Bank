@@ -6,6 +6,6 @@ namespace Web_Bank.Services
     {
         public List<Customer> GetAllCustomers();
         void Update(Account account);
-        Account GetAccounts(int id);
+        public List<Account> GetAccounts(int id);
     }
 }

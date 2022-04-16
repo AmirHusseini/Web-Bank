@@ -15,7 +15,7 @@ namespace Web_Bank.Pages.Customer
             _dbContext = dbContext;
         }
 
-        public int Id { get; set; }
+        public int Id { get; set; } 
         [MaxLength(50)]
         public string Givenname { get; set; }
         [MaxLength(50)]
@@ -28,12 +28,8 @@ namespace Web_Bank.Pages.Customer
         public string Zipcode { get; set; }
         [MaxLength(30)]
         public string Country { get; set; }
-        [MaxLength(2)]
-        public string CountryCode { get; set; }
         [MaxLength(20)]
-        public string NationalId { get; set; }
-        [Range(0, 9999)]
-        public int TelephoneCountryCode { get; set; }
+        public string NationalId { get; set; }        
         public string Telephone { get; set; }
         [MaxLength(50)]
         public string EmailAddress { get; set; }
@@ -54,9 +50,7 @@ namespace Web_Bank.Pages.Customer
             Streetaddress = customer.Streetaddress;
             City = customer.City;
             Country = customer.Country;
-            CountryCode = customer.CountryCode;
             Telephone = customer.Telephone;
-            TelephoneCountryCode = customer.TelephoneCountryCode;
             EmailAddress = customer.EmailAddress;
             Birthday = customer.Birthday;
             NationalId = customer.NationalId;

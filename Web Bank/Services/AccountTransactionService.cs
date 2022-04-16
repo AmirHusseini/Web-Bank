@@ -20,9 +20,9 @@ namespace Web_Bank.Services
             return _dbContext.Customers.Include(a => a.Accounts).ThenInclude(a => a.Transactions).ToList();
         }
 
-        public Account GetAccounts(int id)
+        public List<Account> GetAccounts(int id)
         {
-            return _dbContext.Accounts.First(a => a.Id == id);
+            return _dbContext.Accounts.Where(a => a.Id == id).ToList();
         }
 
         public void Update(Account account)

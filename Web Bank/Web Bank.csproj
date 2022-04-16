@@ -14,12 +14,26 @@
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.3">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\AreaPages\401.html" />
+    <None Include="wwwroot\AreaPages\404.html" />
+    <None Include="wwwroot\AreaPages\500.html" />
+    <None Include="wwwroot\AreaPages\charts.html" />
+    <None Include="wwwroot\AreaPages\layout-sidenav-light.html" />
+    <None Include="wwwroot\AreaPages\layout-static.html" />
+    <None Include="wwwroot\AreaPages\login.html" />
+    <None Include="wwwroot\AreaPages\password.html" />
+    <None Include="wwwroot\AreaPages\register.html" />
+    <None Include="wwwroot\AreaPages\tables.html" />
   </ItemGroup>
 
 </Project>

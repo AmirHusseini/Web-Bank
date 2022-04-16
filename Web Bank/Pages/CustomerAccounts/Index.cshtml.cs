@@ -9,16 +9,21 @@ namespace Web_Bank.Pages.CustomerAccounts
 {
     public class IndexModel : PageModel
     {
-        private readonly AccountTransactionService _account;
+        //private readonly AccountTransactionService _account;
+        private readonly ApplicationDbContext _dbContext;
 
-        public IndexModel(AccountTransactionService account)
+        public IndexModel( ApplicationDbContext context)
         {
-            _account = account;
+           
+            _dbContext = context;
         }
-        public List<Data.Customer> customers { get; set; }
-        public void OnGet()
+        public List<Account>  Accounts{ get; set; }
+        public Data.Customer Customer { get; set; }
+
+        public void OnGet(int customerId)
         {
-            customers = _account.GetAllCustomers();
+            Customer = _dbContext.Customers.Include(a => a.Accounts).FirstOrDefault(c => c.Id == customerId);
+            //Accounts = _dbContext.Accounts.Select(a => a. == customerId).ToList();
         }
     }
 }

@@ -33,16 +33,10 @@ namespace Web_Bank.Pages.Customers
         public string Zipcode { get; set; }
         [MaxLength(30)]
         public string Country { get; set; }
-        [MaxLength(2)]
-        public string CountryCode { get; set; }
-        [MaxLength(20)]
-        public string NationalId { get; set; }
-        [Range(0, 9999)]
-        public int TelephoneCountryCode { get; set; }
         public string Telephone { get; set; }
         [MaxLength(50)]
         public string EmailAddress { get; set; }
-        public DateTime Birthday { get; set; }
+
 
         public IActionResult OnGet(int customerId)
         {
@@ -57,12 +51,8 @@ namespace Web_Bank.Pages.Customers
             Streetaddress = customer.Streetaddress;
             City = customer.City;
             Country = customer.Country;
-            CountryCode = customer.CountryCode;
             Telephone = customer.Telephone;
-            TelephoneCountryCode = customer.TelephoneCountryCode;
             EmailAddress = customer.EmailAddress;
-            Birthday = customer.Birthday;
-            NationalId = customer.NationalId;
             Zipcode = customer.Zipcode;
 
             if (customer == null)
@@ -88,12 +78,8 @@ namespace Web_Bank.Pages.Customers
                 customer.Streetaddress = Streetaddress;
                 customer.City = City;
                 customer.Country = Country;
-                customer.CountryCode = CountryCode;
                 customer.Telephone = Telephone;
-                customer.TelephoneCountryCode = TelephoneCountryCode;
                 customer.EmailAddress = EmailAddress;
-                customer.Birthday = Birthday;             
-                customer.NationalId = NationalId;
                 customer.Zipcode = Zipcode;
                 _dbContext.Customers.Update(customer);
                 _dbContext.SaveChanges();

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Web_Bank.Data;
 
 namespace Web_Bank.ViewModels
 {
@@ -13,5 +14,7 @@ namespace Web_Bank.ViewModels
         [MaxLength(50)]
         public string EmailAddress { get; set; }
         public DateTime Birthday { get; set; }
+        public decimal Balance { get; set; }
+       
     }
 }
