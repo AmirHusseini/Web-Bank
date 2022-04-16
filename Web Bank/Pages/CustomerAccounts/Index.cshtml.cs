@@ -22,6 +22,10 @@ namespace Web_Bank.Pages.CustomerAccounts
 
         public void OnGet(int customerId)
         {
+            if (customerId == null)
+            {
+                
+            }
             Customer = _dbContext.Customers.Include(a => a.Accounts).FirstOrDefault(c => c.Id == customerId);
             //Accounts = _dbContext.Accounts.Select(a => a. == customerId).ToList();
         }

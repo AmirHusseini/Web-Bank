@@ -22,6 +22,10 @@ public class DataInitializer
     {
         _dbContext.Database.Migrate();
         SeedCustomers();
+        SeedAccounts();
+        SeedRoles();
+        SeedUsers();
+
     }
 
     private void SeedCustomers()
@@ -35,7 +39,58 @@ public class DataInitializer
         }
 
     }
+    private void SeedUsers()
+    {
+        AddUserIfNotExists("stefan.holmberg@systementor.se", "Hejsan123#", new string[] { "Admin" });
+        AddUserIfNotExists("stefan.holmberg@customer.systementor.se", "Hejsan123#", new string[] { "Customer" });
+    }
 
+
+    private void SeedRoles()
+    {
+        AddRoleIfNotExisting("Admin");
+        AddRoleIfNotExisting("Customer");
+    }
+
+    private void AddRoleIfNotExisting(string roleName)
+    {
+        var role = _dbContext.Roles.FirstOrDefault(r => r.Name == roleName);
+        if (role == null)
+        {
+            _dbContext.Roles.Add(new IdentityRole { Name = roleName, NormalizedName = roleName });
+            _dbContext.SaveChanges();
+        }
+    }
+
+    private void AddUserIfNotExists(string userName, string password, string[] roles)
+    {
+        if (_userManager.FindByEmailAsync(userName).Result != null) return;
+
+        var user = new IdentityUser
+        {
+            UserName = userName,
+            Email = userName,
+            EmailConfirmed = true
+        };
+        _userManager.CreateAsync(user, password).Wait();
+        _userManager.AddToRolesAsync(user, roles).Wait();
+    }
+    private void SeedAccounts()
+    {
+        AddAccountIfNotExists("Checking");
+        AddAccountIfNotExists("Saving");
+    }
+
+    private void AddAccountIfNotExists(string accountType)
+    {
+        if (_dbContext.Accounts.Any(e => e.AccountType == accountType)) return;
+        _dbContext.Accounts.Add(new Account
+        {
+            AccountType = accountType,
+            Balance = 1000
+        });
+        _dbContext.SaveChanges();
+    }
     private static Random random = new Random();
     private Customer GenerateCustomer()
     {
