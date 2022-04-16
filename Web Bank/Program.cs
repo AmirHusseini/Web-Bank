@@ -1,18 +1,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Web_Bank.Data;
+using Web_Bank.Data.IdentityManager;
 using Web_Bank.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-//var connectionString = builder.Configuration.GetConnectionString("ApplicationDbContextConnection");;
 
-//builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//    options.UseSqlServer(connectionString));;
-
-//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-//    .AddEntityFrameworkStores<ApplicationDbContext>();;
-
-// Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -20,27 +13,28 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     {
         options.SignIn.RequireConfirmedAccount = true;
     })
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultUI()
+    .AddDefaultTokenProviders();
     
 builder.Services.AddRazorPages();
 
-builder.Services.AddTransient<DataInitializer>();
+//builder.Services.AddTransient<DataInitializer>();
 
-//builder.Services.AddTransient<IAccountTransactionService, AccountTransactionService>();
-builder.Services.AddScoped<IAccountTransactionService, AccountTransactionService>();
+
+//builder.Services.AddScoped<IAccountTransactionService, AccountTransactionService>();
 
 var app = builder.Build();
 
 
-using (var scope = app.Services.CreateScope())
-{
-    scope.ServiceProvider.GetService<DataInitializer>().SeedData();
-}
+//using (var scope = app.Services.CreateScope())
+//{
+//    scope.ServiceProvider.GetService<DataInitializer>().SeedData();
+//}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

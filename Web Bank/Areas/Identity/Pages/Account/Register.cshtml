@@ -14,20 +14,22 @@
             <div class="card-body">
                 <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    @*<div class="row mb-3">
+                    <div class="row mb-3">
                         <div class="col-md-6">
                             <div class="form-floating mb-3 mb-md-0">
-                                <input class="form-control" id="inputFirstName" type="text" placeholder="Enter your first name" />
-                                <label for="inputFirstName">First name</label>
+                                <label asp-for="Input.FirstName"></label>
+                                <input asp-for="Input.FirstName" class="form-control" />
+                                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating">
-                                <input class="form-control" id="inputLastName" type="text" placeholder="Enter your last name" />
-                                <label for="inputLastName">Last name</label>
+                                <label asp-for="Input.LastName"></label>
+                                <input asp-for="Input.LastName" class="form-control" />
+                                <span asp-validation-for="Input.LastName" class="text-danger"></span>
                             </div>
                         </div>
-                    </div>*@
+                    </div>
                     
                     <div class="form-floating mb-3">
                         <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />

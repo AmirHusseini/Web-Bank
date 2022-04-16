@@ -1,17 +1,18 @@
 ﻿using Bogus;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Web_Bank.Data.IdentityManager;
 
 namespace Web_Bank.Data;
 
 public class DataInitializer
 {
     private readonly ApplicationDbContext _dbContext;
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
 
 
     public DataInitializer(ApplicationDbContext dbContext,
-        UserManager<IdentityUser> userManager)
+        UserManager<ApplicationUser> userManager)
     {
         _dbContext = dbContext;
         _userManager = userManager;
@@ -66,7 +67,7 @@ public class DataInitializer
     {
         if (_userManager.FindByEmailAsync(userName).Result != null) return;
 
-        var user = new IdentityUser
+        var user = new ApplicationUser
         {
             UserName = userName,
             Email = userName,
@@ -79,6 +80,7 @@ public class DataInitializer
     {
         AddAccountIfNotExists("Checking");
         AddAccountIfNotExists("Saving");
+        AddAccountIfNotExists("Personal");
     }
 
     private void AddAccountIfNotExists(string accountType)
