@@ -9,24 +9,24 @@ public class DataInitializer
 {
     private readonly ApplicationDbContext _dbContext;
     private readonly UserManager<ApplicationUser> _userManager;
-
+    private readonly RoleManager<IdentityRole> _roleManager;
 
     public DataInitializer(ApplicationDbContext dbContext,
-        UserManager<ApplicationUser> userManager)
+        UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
     {
         _dbContext = dbContext;
         _userManager = userManager;
+        _roleManager = roleManager;
     }
 
 
     public void SeedData()
     {
         _dbContext.Database.Migrate();
-        SeedCustomers();
         SeedAccounts();
         SeedRoles();
         SeedUsers();
-
+        SeedCustomers();
     }
 
     private void SeedCustomers()
@@ -58,23 +58,27 @@ public class DataInitializer
         var role = _dbContext.Roles.FirstOrDefault(r => r.Name == roleName);
         if (role == null)
         {
-            _dbContext.Roles.Add(new IdentityRole { Name = roleName, NormalizedName = roleName });
+            _dbContext.Roles.Add(new IdentityRole(roleName));
             _dbContext.SaveChanges();
         }
     }
 
     private void AddUserIfNotExists(string userName, string password, string[] roles)
     {
+
         if (_userManager.FindByEmailAsync(userName).Result != null) return;
 
         var user = new ApplicationUser
         {
             UserName = userName,
             Email = userName,
+            FirstName = "Stefan",
+            LastName = "Holmberg",
             EmailConfirmed = true
         };
         _userManager.CreateAsync(user, password).Wait();
         _userManager.AddToRolesAsync(user, roles).Wait();
+
     }
     private void SeedAccounts()
     {
@@ -231,4 +235,5 @@ public class DataInitializer
         }
         return account;
     }
+    
 }

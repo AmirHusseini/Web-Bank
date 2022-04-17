@@ -131,13 +131,15 @@ namespace Web_Bank.Areas.Identity.Pages.Account
                     FirstName = Input.FirstName,
                     LastName = Input.LastName
                 };
+                
                 //var user = CreateUser();
-                //if (EmailExist(Input.Email))
-                //{
+                if (!EmailExist(Input.Email))
+                {
                     await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                     await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                    await _userManager.AddToRoleAsync(user, "Customer");
                     
-                //}
+                }
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
@@ -198,10 +200,11 @@ namespace Web_Bank.Areas.Identity.Pages.Account
             }
             return (IUserEmailStore<ApplicationUser>)_userStore;
         }
-        //private bool EmailExist (string email) 
-        //{
-        //    return _dbContext.Customers.Any(a => a.EmailAddress == email);
-                        
-        //}
+        private bool EmailExist(string email)
+        {
+            
+            return _dbContext.Customers.Any(a => a.EmailAddress == email);
+
+        }
     }
 }

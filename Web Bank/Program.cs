@@ -23,18 +23,18 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     
 builder.Services.AddRazorPages();
 
-//builder.Services.AddTransient<DataInitializer>();
+builder.Services.AddTransient<DataInitializer>();
 
 
-//builder.Services.AddScoped<IAccountTransactionService, AccountTransactionService>();
+builder.Services.AddScoped<IAccountTransactionService, AccountTransactionService>();
 
 var app = builder.Build();
 
 
-//using (var scope = app.Services.CreateScope())
-//{
-//    scope.ServiceProvider.GetService<DataInitializer>().SeedData();
-//}
+using (var scope = app.Services.CreateScope())
+{
+    scope.ServiceProvider.GetService<DataInitializer>().SeedData();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
