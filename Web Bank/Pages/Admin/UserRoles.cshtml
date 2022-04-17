@@ -1,0 +1,32 @@
+﻿@page
+@model Web_Bank.Pages.Admin.UserRolesModel
+@{
+}
+<div class="container-fluid px-4">
+    <form method="post">
+    <h1>User Roles</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>UserName/Email</th>
+                <th>Email</th>
+                <th>Roles</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.userRolesViews)
+            {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>@string.Join(" , ", user.Roles.ToList())</td>
+                <td>
+                    <a class="btn btn-primary" asp-page="ManageUserRoles" asp-route-userId="@user.UserId">Manage Roles</a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    </form>
+</div>

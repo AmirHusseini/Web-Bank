@@ -23,7 +23,6 @@ public class DataInitializer
     {
         _dbContext.Database.Migrate();
         SeedCustomers();
-        //SeedAccounts();
         SeedRoles();
         SeedUsers();
 
@@ -41,8 +40,8 @@ public class DataInitializer
     }
     private void SeedUsers()
     {
-        AddUserIfNotExists("stefan.holmberg@systementor.se", "Hejsan123#", "Admin");
-        AddUserIfNotExists("stefan.holmberg@customer.systementor.se", "Hejsan123#", "Customer");
+        AddUserIfNotExists("stefan.holmberg@systementor.se", "Hejsan123#", new string[] { "Admin" });
+        AddUserIfNotExists("stefan.holmberg@customer.systementor.se", "Hejsan123#", new string[] { "Customer" });
     }
 
 
@@ -67,7 +66,7 @@ public class DataInitializer
         }
     }
 
-    private void AddUserIfNotExists(string userName, string password, string roles)
+    private void AddUserIfNotExists(string userName, string password, string[] roles)
     {
         if (_userManager.FindByEmailAsync(userName).Result != null) return;
 
@@ -79,25 +78,9 @@ public class DataInitializer
         };
         
         _userManager.CreateAsync(user, password).Wait();
-        _userManager.AddToRoleAsync(user, roles).Wait();
+        _userManager.AddToRolesAsync(user, roles).Wait();
     }
-    //private void SeedAccounts()
-    //{
-    //    AddAccountIfNotExists("Checking");
-    //    AddAccountIfNotExists("Saving");
-    //    AddAccountIfNotExists("Personal");
-    //}
-
-    //private void AddAccountIfNotExists(string accountType)
-    //{
-    //    if (_dbContext.Accounts.Any(e => e.AccountType == accountType)) return;
-    //    _dbContext.Accounts.Add(new Account
-    //    {
-    //        AccountType = accountType,
-    //        Balance = 1000
-    //    });
-    //    _dbContext.SaveChanges();
-    //}
+    
     private static Random random = new Random();
     private Customer GenerateCustomer()
     {

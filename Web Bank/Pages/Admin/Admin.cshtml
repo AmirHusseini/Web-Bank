@@ -1,0 +1,39 @@
+﻿@page
+@model Web_Bank.Pages.Admin.AdminModel
+@{
+}
+<div class="container-fluid px-4">
+    <h1>Role Manager</h1>
+    <form asp-page-handler="Create" method="post">
+        <div class="input-group">
+            <input name="name" class="form-control w-25">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-info">Add New Role</button>
+            </span>
+        </div>
+    </form>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Role</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.AllRoles)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Name</td>
+                    <td>
+                        <form asp-page-handler="Delete" method="post">
+                        
+                            <button type="submit" class="btn btn-primary" name="id" value="@item.Id" >Delete</button>                                                    
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
