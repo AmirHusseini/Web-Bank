@@ -8,11 +8,11 @@ namespace Web_Bank.Data;
 public class DataInitializer
 {
     private readonly ApplicationDbContext _dbContext;
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly UserManager<IdentityUser> _userManager;
 
 
     public DataInitializer(ApplicationDbContext dbContext,
-        UserManager<ApplicationUser> userManager)
+        UserManager<IdentityUser> userManager)
     {
         _dbContext = dbContext;
         _userManager = userManager;
@@ -23,7 +23,7 @@ public class DataInitializer
     {
         _dbContext.Database.Migrate();
         SeedCustomers();
-        SeedAccounts();
+        //SeedAccounts();
         SeedRoles();
         SeedUsers();
 
@@ -33,8 +33,7 @@ public class DataInitializer
     {
         while (_dbContext.Customers.Count() < 5000)
         {
-            var a =
-                GenerateCustomer();
+            var a = GenerateCustomer();
             _dbContext.Customers.Add(a);
             _dbContext.SaveChanges();
         }
@@ -42,8 +41,8 @@ public class DataInitializer
     }
     private void SeedUsers()
     {
-        AddUserIfNotExists("stefan.holmberg@systementor.se", "Hejsan123#", new string[] { "Admin" });
-        AddUserIfNotExists("stefan.holmberg@customer.systementor.se", "Hejsan123#", new string[] { "Customer" });
+        AddUserIfNotExists("stefan.holmberg@systementor.se", "Hejsan123#", "Admin");
+        AddUserIfNotExists("stefan.holmberg@customer.systementor.se", "Hejsan123#", "Customer");
     }
 
 
@@ -58,41 +57,47 @@ public class DataInitializer
         var role = _dbContext.Roles.FirstOrDefault(r => r.Name == roleName);
         if (role == null)
         {
-            _dbContext.Roles.Add(new IdentityRole { Name = roleName, NormalizedName = roleName });
+            _dbContext.Roles.Add(new IdentityRole
+            { 
+                Name = roleName,
+                NormalizedName = roleName.ToUpper()
+            });
+                
             _dbContext.SaveChanges();
         }
     }
 
-    private void AddUserIfNotExists(string userName, string password, string[] roles)
+    private void AddUserIfNotExists(string userName, string password, string roles)
     {
         if (_userManager.FindByEmailAsync(userName).Result != null) return;
 
-        var user = new ApplicationUser
+        var user = new IdentityUser
         {
             UserName = userName,
             Email = userName,
             EmailConfirmed = true
         };
+        
         _userManager.CreateAsync(user, password).Wait();
-        _userManager.AddToRolesAsync(user, roles).Wait();
+        _userManager.AddToRoleAsync(user, roles).Wait();
     }
-    private void SeedAccounts()
-    {
-        AddAccountIfNotExists("Checking");
-        AddAccountIfNotExists("Saving");
-        AddAccountIfNotExists("Personal");
-    }
+    //private void SeedAccounts()
+    //{
+    //    AddAccountIfNotExists("Checking");
+    //    AddAccountIfNotExists("Saving");
+    //    AddAccountIfNotExists("Personal");
+    //}
 
-    private void AddAccountIfNotExists(string accountType)
-    {
-        if (_dbContext.Accounts.Any(e => e.AccountType == accountType)) return;
-        _dbContext.Accounts.Add(new Account
-        {
-            AccountType = accountType,
-            Balance = 1000
-        });
-        _dbContext.SaveChanges();
-    }
+    //private void AddAccountIfNotExists(string accountType)
+    //{
+    //    if (_dbContext.Accounts.Any(e => e.AccountType == accountType)) return;
+    //    _dbContext.Accounts.Add(new Account
+    //    {
+    //        AccountType = accountType,
+    //        Balance = 1000
+    //    });
+    //    _dbContext.SaveChanges();
+    //}
     private static Random random = new Random();
     private Customer GenerateCustomer()
     {

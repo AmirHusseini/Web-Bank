@@ -1,6 +1,6 @@
 ﻿@using Web_Bank.Data.IdentityManager
-@inject SignInManager<ApplicationUser> SignInManager
-@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
 <!DOCTYPE html>
 
 <html lang="en">
@@ -43,6 +43,13 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Dashboard
                             </a>
+                            @if (SignInManager.IsSignedIn(User) @*&& User.IsInRole("Admin")*@)
+                            {
+                                <a class="nav-link" asp-area="" asp-page="/CustomerDetails/Index">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                    Customers
+                                </a>
+                            }
                             <div class="sb-sidenav-menu-heading">Interface</div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
@@ -95,14 +102,8 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Charts
                             </a>
-                            @*&& User.IsInRole("Admin")*@
-                            @if (SignInManager.IsSignedIn(User) )
-                            {
-                                <a class="nav-link" asp-area="" asp-page="/CustomerDetails/Index">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                                    Customers
-                                </a>
-                            }
+                            
+                            
                             
                         </div>
                     </div>
@@ -113,10 +114,10 @@
                 </nav>
             </div>
             <div id="layoutSidenav_content">
-                <main role="main" class="pb-3">
-                    <div>
+                <main>
+                    
                         @RenderBody()
-                    </div>
+                    
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">

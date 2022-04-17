@@ -2,13 +2,14 @@
 @model Web_Bank.Pages.CustomerAccounts.IndexModel
 @{
 }
+<div class="container-fluid px-4">
+	<h2>@Model.Customer.Givenname</h2>
 
-<h2>@Model.Customer.Givenname</h2>
-
-@foreach (var item in Model.Customer.Accounts)
-{
-	<h2>@item.Id</h2>
-	<h5>@item.Created</h5>
-	<h5>@item.Balance</h5>
-	<h5>@item.AccountType</h5>
-}
+	@foreach (var item in Model.Customer.Accounts)
+	{
+		<h2>@item.Id</h2>
+		<h5>@item.Created</h5>
+		<h5>@item.Balance</h5>
+		<h5>@item.AccountType</h5>
+	}
+</div>

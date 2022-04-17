@@ -43,8 +43,4 @@
     <None Include="wwwroot\AreaPages\tables.html" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-
 </Project>

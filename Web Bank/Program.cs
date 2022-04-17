@@ -13,28 +13,27 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     {
         options.SignIn.RequireConfirmedAccount = true;
     })
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultUI()
-    .AddDefaultTokenProviders();
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
+
     
 builder.Services.AddRazorPages();
 
-//builder.Services.AddTransient<DataInitializer>();
+builder.Services.AddTransient<DataInitializer>();
 
-
-//builder.Services.AddScoped<IAccountTransactionService, AccountTransactionService>();
+builder.Services.AddTransient<IAccountTransactionService, AccountTransactionService>();
 
 var app = builder.Build();
 
 
-//using (var scope = app.Services.CreateScope())
-//{
-//    scope.ServiceProvider.GetService<DataInitializer>().SeedData();
-//}
+using (var scope = app.Services.CreateScope())
+{
+    scope.ServiceProvider.GetService<DataInitializer>().SeedData();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
