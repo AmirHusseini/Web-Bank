@@ -3,13 +3,30 @@
 @{
 }
 <div class="container-fluid px-4">
-	<h2>@Model.Customer.Givenname</h2>
-
-	@foreach (var item in Model.Customer.Accounts)
-	{
-		<h2>@item.Id</h2>
-		<h5>@item.Created</h5>
-		<h5>@item.Balance</h5>
-		<h5>@item.AccountType</h5>
-	}
+    <h1 class="mt-4">@Model.ViewModelAccounts.Surname @Model.ViewModelAccounts.Givenname</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">Customer AccountNr: @Model.ViewModelAccounts.Id</li>
+    </ol>
+    <div class="col-xl-2 col-md-6">
+        <div class="card bg-success text-white mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Total Balance</h5>
+                 <p class="card-text">@Model.Total</p>
+            </div>                
+        </div>
+    </div>
+    <div class="row">
+        @foreach (var item in @Model.ViewModelAccounts.Accounts)
+        {
+            <div class="col-xl-4 col-md-6">
+            <div class="card bg-primary text-white mb-4">
+                <div class="card-body">@item.AccountType</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white stretched-link" asp-route-customerId = "@Model.ViewModelAccounts.Id" asp-route-accountId ="@item.Id" asp-page="/CustomerAccounts/Transactions">@item.Balance</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+        }       
+    </div>        
 </div>

@@ -15,12 +15,13 @@
             <table id="datatablesSimple">
                 <thead>
                     <tr>
+                        <th>AccountNr</th>
                         <th>Given Name</th>
                         <th>Surname</th>
-                        <th>Birthday</th>
-                        <th>Email</th>
-                        <th>Tel</th>
-                        <th>Account</th>
+                        <th>NationalId</th> 
+                        <th>Address</th>
+                        <th>City</th>
+                        <th>Accounts</th>
                         <th>Edit</th>
                         <th>Detail</th>
                         <th>Remove</th>
@@ -31,11 +32,12 @@
                     @foreach (var customer in Model.Customers)
                     {
                     <tr>
+                        <td>@customer.Id</td>
                         <td>@customer.Givenname</td>
                         <td>@customer.Surname</td>
-                        <td>@customer.Birthday</td>
-                        <td>@customer.EmailAddress</td>
-                        <td>@customer.Telephone</td>
+                        <td>@customer.NationalId</td>
+                        <td>@customer.Streetaddress</td>
+                        <td>@customer.City</td>
                         <td><a asp-page="../CustomerAccounts/Index" asp-route-customerId="@customer.Id"><i class='bx bxs-bank'></i></a></td>
                         <td> <a asp-page="Edit" asp-route-customerId="@customer.Id"><i class='bx bx-edit'></i></a></td>
                         <td><a asp-page="View" asp-route-customerId="@customer.Id"> <i class='bx bxs-user-detail bx-flip-horizontal'></i></a></td>

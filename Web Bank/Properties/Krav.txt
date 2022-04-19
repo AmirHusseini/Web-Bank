@@ -1,0 +1,47 @@
+﻿
+
+
+
+- Bygg en ASP.NET Core lösning för en bank som kan hantera kunder, deras konton med saldo samt transaktioner. 
+
+
+
+- Grundprinciper kring "best practices", framförallt ViewModels . Jag vill inte se någon databasentitet i vyer 
+
+- Vissa saker nämner jag inte specifikt, tex förutsätter jag att du implementerar inputvalidering etc. Detta är ett RIKTIGT system med "dumma" användare. Att du programmerar mot Interface och inte faktiska implementationer är en annan självklarhet
+
+- Startsida: skriv ut statistik på startsidan. Du ska se antal kunder, antal konton och summan av saldot på konton. 
+
+Det ska gå att ta fram en kundbild genom att ange kundnummer. Kundbilden ska visa all information om kunden och alla kundens konton. Kundbilden ska också visa det totala saldot för kunden genom att summera saldot på kundens konton.
+
+Det ska gå att söka efter kund på namn och stad. En lista ska visas med kundnummer och personnummer, namn, adress, city som sökresultat. Sökresultatet ska vara paginerat (50 resultat i taget och så ska man kunna bläddra till nästa/tidigare sida). Klickar man på en kund ska man komma till kundbilden.
+
+Lägg till en kontobild där man kan se transaktioner för ett individuellt konto. När man klickar på ett kontonummer i kundbilden ska man komma till en kontosida som visar kontonummer och saldo samt en lista med transaktioner i descending order. Om det finns fler än 20 transaktioner ska JavaScript/AJAX användas för att ladda in ytterligare 20 transaktioner när man trycker på en knapp längst ned i listan. Trycker man igen laddas 20 till, och så vidare.
+
+Systemet ska också hantera insättningar, uttag och överföringar mellan konton. 
+
+Det ska alltså inte gå att ändra saldo direkt på ett konto - alltid via en transaktion.
+
+Det ska framgå tydligt om någon försöker ta ut eller överföra mer pengar än vad som finns på kontot! 
+
+ASP.NET Core Identity.  Du ska lägga in roller via seed,   Rollen Admin ska kunna administrera användare /att administrera användare är VG krav, men gör en acrtionmetod och tom vy för detta för G fast med rätt behörighet). Rollen Cashier ska kunna administrera  kunder och deras konton. OBS: kunder är inte users det är endast admins och cashiers som jobbar med systemet
+
+Rollerna Admin och Cashier ska automatiskt skapas i databasen vid uppstart om de inte finns. (Seed)
+
+Det ska finnas Unit Test-projekt där du skriver tester som testar att det 
+
+1) inte går att ta ut eller
+2) överföra mer pengar än det finns på kontot. Det ska inte heller
+3) gå att sätta in eller
+4) ta ut negativa belopp.
+
+Det ska också finnas tester som verifierar att det skapas en korrekt transaktion.
+Seeda två användare:
+stefan.holmberg@systementor.se och Hejsan123# och som Admin
+
+stefan.holmberg@customer.banken.se och Hejsan123# och som Cashier
+Driftsätt din lösning och databas till Azure.
+----------------------------------------------------------------------------------------------------------------
+
+--Du ska i grunden utgå från den databas (DBContext + seed data) som ingår i startprojektet.
+-- Bygg ett webbgränssnitt med ASP.NET Core Razor Pages. Ladda ner en ”FREE BOOTSTRAP TEMPLATE” och modifiera layout etc så den används!   Alt skapa CSS från grunden själv. Men jag vill att sajten ska se ”bra” ut!

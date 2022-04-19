@@ -15,38 +15,22 @@ namespace Web_Bank.Pages.Customer
             _dbContext = dbContext;
         }
 
-        public List<CustomerViewModel> Customers { get; set; }
+        public List<CustomersViewModel> Customers { get; set; }
         
 
         public void OnGet()
         {
-            Customers = (from c in _dbContext.Customers
-                         join a in _dbContext.Accounts on c.Id equals a.Id
-                         where c.Id == a.Id
-                         select new CustomerViewModel
-                         {
-                             Id = c.Id,
-                             Givenname = c.Givenname,
-                             Surname = c.Surname,
-                             EmailAddress = c.EmailAddress,
-                             Birthday = c.Birthday,
-                             Telephone = c.Telephone,
-                             Balance = a.Balance
-                         }).ToList();
-
-            //Customers = _dbContext.Customers.Include(a => a.Accounts)
-            //.Select(c => new CustomerViewModel
-            //{
-            //    Id = c.Id,
-            //    Givenname = c.Givenname,
-            //    Surname = c.Surname,
-            //    Birthday = c.Birthday,
-            //    EmailAddress = c.EmailAddress,
-            //    Telephone = c.Telephone,
-            //    Balance = c.Accounts.Select(a => a.Balance)
-
-            //}
-            //).ToList();
+            Customers = _dbContext.Customers
+            .Select(c => new CustomersViewModel
+            {
+                Id = c.Id,
+                Givenname = c.Givenname,
+                Surname = c.Surname,
+                NationalId = c.NationalId,
+                Streetaddress = c.Streetaddress,
+                City = c.City
+            }
+            ).ToList();
         }
     }
 }
