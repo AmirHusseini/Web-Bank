@@ -43,13 +43,13 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Dashboard
                             </a>
-                            @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
-                            {
+                            @*@if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                            {*@
                                 <a class="nav-link" asp-area="" asp-page="/CustomerDetails/Index">
                                     <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                     Customers
                                 </a>
-                            }
+                            @*}*@
                             <div class="sb-sidenav-menu-heading">Interface</div>
                             @if (SignInManager.IsSignedIn(User) && User.IsInRole("Customer"))
                             {

@@ -10,7 +10,7 @@ using Web_Bank.ViewModels;
 
 namespace Web_Bank.Pages.CustomerAccounts
 {
-    [Authorize]
+    //[Authorize]
     public class IndexModel : PageModel
     {
         
@@ -43,7 +43,7 @@ namespace Web_Bank.Pages.CustomerAccounts
                 return Page();
             }
 
-            else if (User.IsInRole("Admin"))
+            else /*if (User.IsInRole("Admin"))*/
             {
                 var customer = _dbContext.Customers.Include(a => a.Accounts).FirstOrDefault(x => x.Id == customerId);
                 ViewModelAccounts = new CustomerAccountViewModel
@@ -56,11 +56,11 @@ namespace Web_Bank.Pages.CustomerAccounts
                 Total = customer.Accounts.Sum(a => a.Balance);
                 return Page();
             }
-            else
-            {
-                return LocalRedirect("/Identity/Account/AccessDenied");
+            //else
+            //{
+            //    return LocalRedirect("/Identity/Account/AccessDenied");
                 
-            }
+            //}
             
         }    
     }

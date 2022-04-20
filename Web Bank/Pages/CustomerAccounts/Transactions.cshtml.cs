@@ -17,14 +17,11 @@ namespace Web_Bank.Pages.CustomerAccounts
         }
         public List<TransactionsViewModel> AllTransactions { get; set; }
 
-        public void OnGet(int customerId, int accountId)
-        {
-            var customer = _dbContext.Customers
-                .Include(a => a.Accounts)
-                .ThenInclude(a => a.Transactions)
-                .FirstOrDefault(c => c.Id == customerId);
+        public void OnGet(int accountId)
+        {            
             
-            AllTransactions = customer.Accounts
+            AllTransactions = _dbContext.Accounts
+                .Include(x => x.Transactions)
                 .FirstOrDefault(a => a.Id == accountId).Transactions
                 
                 .Select(t => new TransactionsViewModel
