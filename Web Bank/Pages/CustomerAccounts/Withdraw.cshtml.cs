@@ -9,19 +9,14 @@ namespace Web_Bank.Pages.CustomerAccounts
     public class WithdrawModel : PageModel
     {
         private readonly ApplicationDbContext _dbContext;
-
+        
         public WithdrawModel(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
         
         public List<SelectListItem> Accounts { get; set; }
-
-        [BindProperty(SupportsGet = true)]
-        public int CategoryId { get; set; }
-        [BindProperty]
-        public decimal Total { get; set; }
-        public int SubCategoryId { get; set; }
+        public List<Data.Customer> customers { get; set; }
         public void OnGet(int customerId)
         {
             var customer = _dbContext.Customers
@@ -35,13 +30,20 @@ namespace Web_Bank.Pages.CustomerAccounts
                     Text = a.AccountType,
                     
                 }).ToList();
-            
-            
-            
+            customers = _dbContext.Customers.ToList();
         }
-        public IActionResult OnGetSubCategories(int CategoryId)
+        public IActionResult OnGetFetchInfo(int id)
         {
-            Total = _dbContext.Accounts.FirstOrDefault(a => a.Id == CategoryId).Balance;
+            var account = _dbContext.Accounts.First(e => e.Id == id);
+            return new JsonResult(new
+            {
+                balance = account.Balance
+                
+            });
+
+        }
+        public IActionResult OnPostUpdate()
+        {
             return Page();
         }
 

@@ -1,5 +1,6 @@
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,6 +12,7 @@ using Web_Bank.ViewModels;
 namespace Web_Bank.Pages.CustomerAccounts
 {
     //[Authorize]
+    
     public class IndexModel : PageModel
     {
         

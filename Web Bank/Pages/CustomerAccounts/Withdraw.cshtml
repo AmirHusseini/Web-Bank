@@ -10,51 +10,55 @@
                     <h3 class="text-center font-weight-light my-4">Withdraw</h3>
                 </div>
                 <div class="card-body">
-                    <form class="row g-3" method="post" asp-page-handler="Post">
+                    <form class="row g-3" method="post" asp-page-handler="Update">
                         <div class="input-group mb-3">
-                            <select class="form-select" id="CategoryId" asp-for="CategoryId" asp-items="Model.Accounts">
+                            <select class="form-select" id="myDropdown" asp-items="Model.Accounts">
                                 <option selected>Select your account</option>
                             </select>
-                            <select asp-for="SubCategoryId"></select>
+                            
                         </div>
-                        <div class="input-group">
-                          <input type="text" class="form-control" aria-label="Amount to withdraw">
+                        <div class="input-group mb-3">
+                            <label for="exampleFormControlTextarea1" class="form-label">Amount to withdraw: </label>
+                          <input type="text" class="form-control" aria-label="">                                                    
                           <span class="input-group-text">$</span>
-                          <span class="input-group-text">0.00</span>
                         </div>
                         <div class="mb-3">
-                          <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
+                          <label for="exampleFormControlTextarea1" class="form-label">Comments</label>
                           <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                         </div>
                         <div class="input-group">
-                            <input class="form-control" type="text" value="Disabled readonly input"  aria-label="@Model.Total" disabled readonly>
+                            <input class="form-control" type="text" value="This Account's' Balance is"  aria-label="" disabled readonly>
+                            <span class="input-group-text" id="balance"></span>
                             <span class="input-group-text">$</span>
-                            <span class="input-group-text">0.00</span>
                         </div>
                     </form>
                     </div>
+                    <h1 id="Name"></h1>
                 <div class="card-footer text-center py-3">
                     <a type="button" class="btn btn-primary" asp-page="Login">Withdraw</></a>
                     <a type="button" class="btn btn-primary" asp-page="Login">Back</></a>
                 </div>
+                
             </div>
         </div>
     </div>
 </div>
-@section scripts
-{ 
-    <script type="text/javascript">
-        $(function () {
-            $("#CategoryId").on("change", function() {
-                var categoryId = $(this).val();
-                $("#SubCategoryId").empty();
-                $("#SubCategoryId").append("<option value=''>Select SubCategory</option>");
-                $.getJSON(`?handler=SubCategories&categoryId=${categoryId}`, (data) => {
-                    $.each(data, function (i, item) {
-                        $("#SubCategoryId").append(`<option value="${item.subCategoryId}">${item.subCategoryName}</option>`);
-                    });
-                });
-            });
-        });
+
+@section Scripts
+{
+    <script>
+        const select = document.getElementById('myDropdown');
+        
+        select.addEventListener('change', function handleChange(event) {
+          
+          selectedItem = select.options[select.selectedIndex].value;
+
+          fetch('/CustomerAccounts/Withdraw?handler=FetchInfo&id=' + selectedItem)
+          .then( response => response.json() )
+            .then( response => {
+                document.getElementById('balance').innerHTML= response.balance;
+            } );
+
+        });        
     </script>
 }
