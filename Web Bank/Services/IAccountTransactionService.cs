@@ -4,8 +4,9 @@ namespace Web_Bank.Services
 {
     public interface IAccountTransactionService
     {
-        public List<Customer> GetAllCustomers();
+        public List<Account> GetAllAccounts();
         void Update(Account account);
-        public List<Account> GetAccounts(int id);
+        public Account GetAccount(int accountId);
+        public bool Withdraw(int accountId, int belopp);
     }
 }
