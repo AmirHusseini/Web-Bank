@@ -7,6 +7,7 @@ using Web_Bank.Services;
 
 namespace Web_Bank.Pages.CustomerAccounts
 {
+    [BindProperties]
     public class WithdrawModel : PageModel
     {
         private readonly ApplicationDbContext _dbContext;
@@ -16,9 +17,9 @@ namespace Web_Bank.Pages.CustomerAccounts
             _dbContext = dbContext;
             _transactionService = transactionService;
         }
-        [BindProperty]
+        
         public Decimal Amount { get; set; }
-
+        public int AccountId { get; set; }
         public List<SelectListItem> Accounts { get; set; }
         
         public void OnGet(int customerId)
@@ -39,22 +40,18 @@ namespace Web_Bank.Pages.CustomerAccounts
         public IActionResult OnGetFetchInfo(int id)
         {
             var account = _transactionService.GetAccount(id);
+            
 
             return new JsonResult(new
             {
-                balance = account.Balance
-                
+                balance = account.Balance,
+                currentaccountid = account.Id
             });
 
         }
         public IActionResult OnPostUpdate(int accountId, int amount)
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-                
-            }
-            else
+            if (ModelState.IsValid)
             {
                 var account = _transactionService.GetAccount(accountId);
 
@@ -62,8 +59,14 @@ namespace Web_Bank.Pages.CustomerAccounts
                 {
                     account.Balance -= amount;
                     _transactionService.Update(account);
-                    
+
                 }
+                return Page();
+                
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Invalid attempt.");
                 return Page();
             }
                 
