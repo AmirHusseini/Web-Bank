@@ -39,4 +39,8 @@
     <None Include="wwwroot\AreaPages\tables.html" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\asd\" />
+  </ItemGroup>
+
 </Project>

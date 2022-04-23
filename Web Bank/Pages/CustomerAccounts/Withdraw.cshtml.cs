@@ -53,15 +53,16 @@ namespace Web_Bank.Pages.CustomerAccounts
         {
             if (ModelState.IsValid)
             {
-                var account = _transactionService.GetAccount(accountId);
-
-                if (_transactionService.Withdraw(accountId, amount))
+                if (_transactionService.CanWithdraw(accountId, amount))
                 {
-                    account.Balance -= amount;
-                    _transactionService.Update(account);
-
+                    _transactionService.Withdraw(accountId, amount);
+                    return RedirectToPage("./Transactions", new { accountId = accountId });
                 }
-                return Page();
+                else
+                {
+                    //await _signInManager.SignInAsync(user, isPersistent: false);
+                    //return LocalRedirect(returnUrl);
+                }               
                 
             }
             else
@@ -69,9 +70,9 @@ namespace Web_Bank.Pages.CustomerAccounts
                 ModelState.AddModelError(string.Empty, "Invalid attempt.");
                 return Page();
             }
-                
-            
-            
+            return Page();
+
+
         }
 
     }

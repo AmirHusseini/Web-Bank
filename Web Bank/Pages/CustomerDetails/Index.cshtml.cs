@@ -13,24 +13,31 @@ namespace Web_Bank.Pages.Customer
         public IndexModel(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
-        }
+        }        
 
-        public List<CustomersViewModel> Customers { get; set; }
-        
+        public List<InputViewModel> Customers { get; set; }
 
-        public void OnGet()
+        public async Task<IActionResult> OnGetAsync(int? id)
         {
-            Customers = _dbContext.Customers
-            .Select(c => new CustomersViewModel
+
+            Customers = await _dbContext.Customers.Select(e => new InputViewModel 
+            { 
+                Id = e.Id,
+                Givenname = e.Givenname,
+                Surname = e.Surname,
+                NationalId = e.NationalId,
+                Streetaddress = e.Streetaddress,
+                City = e.City
+                 
+            }).ToListAsync();
+
+
+            if (Customers == null)
             {
-                Id = c.Id,
-                Givenname = c.Givenname,
-                Surname = c.Surname,
-                NationalId = c.NationalId,
-                Streetaddress = c.Streetaddress,
-                City = c.City
+                return NotFound();
             }
-            ).ToList();
+
+            return Page();
         }
     }
 }

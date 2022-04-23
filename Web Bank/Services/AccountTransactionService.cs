@@ -22,18 +22,38 @@ namespace Web_Bank.Services
         {
             return _dbContext.Accounts.FirstOrDefault(a => a.Id == accountId);
         }
+       
 
-        public void Update(Account account)
+        public void Withdraw(int accountId, int amount)
         {
+            var account = _dbContext.Accounts.FirstOrDefault(a => a.Id == accountId);
+                    
+            account.Balance -= amount;
+
+            var transaction = new Transaction
+            {
+                Amount = amount,
+                Date = DateTime.Now,
+                NewBalance = account.Balance,
+                Operation = "ATM withdrawal",
+                Type = "Credit"
+            };
+
             _dbContext.Accounts.Update(account);
+            _dbContext.Accounts.FirstOrDefault(a => a.Id == accountId).Transactions.Add(transaction);
             _dbContext.SaveChanges();
         }
-
-        public bool Withdraw(int accountId, int belopp)
+        public bool CanWithdraw(int accountId, int amount)
         {
             var account = _dbContext.Accounts.FirstOrDefault(a => a.Id == accountId);
             
-            if (belopp <= 0)
+            if (amount <= 0)
+            {
+
+                return false;
+
+            }
+            else if (account.Balance < amount)
             {
                 return false;
             }
@@ -42,10 +62,8 @@ namespace Web_Bank.Services
                 return true;
             }
 
-
         }
 
-        
         //public Account Deposit(int accountId, int belopp)
         //{
 

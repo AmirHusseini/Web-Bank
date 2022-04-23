@@ -11,7 +11,7 @@
         <div class="card bg-success text-white mb-4">
             <div class="card-body">
                 <h5 class="card-title">Total Balance</h5>
-                 <p class="card-text">@Model.Total</p>
+                 <p class="card-text">@Model.Total $</p>
             </div>                
         </div>
     </div>
@@ -23,14 +23,17 @@
             <div class="card bg-primary text-white mb-4">
                 <div class="card-body">@item.AccountType</div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" asp-route-accountId ="@item.Id" asp-page="/CustomerAccounts/Transactions">@item.Balance</a>
+                    <a class="small text-white stretched-link" asp-route-accountId ="@item.Id" asp-page="/CustomerAccounts/Transactions">See Transactions @item.Balance $</a>
                     
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     
                 </div>
             </div>
         </div>
-        <a class="small text-black stretched-link" asp-route-customerId = "@Model.ViewModelAccounts.Id" asp-route-accountId ="@item.Id" asp-page="./Withdraw">Withdraw</a>
+        <div class="card-footer d-flex align-items-center justify-content-between">
+        <a asp-route-customerId = "@Model.ViewModelAccounts.Id" asp-route-accountId ="@item.Id" asp-page="./Withdraw">Withdraw</a>
+        </div>
         }       
-    </div>        
+    </div>
+    
 </div>

@@ -28,12 +28,13 @@ namespace Web_Bank.Pages.CustomerAccounts
         public CustomerAccountViewModel ViewModelAccounts { get; set; }
         public decimal Total { get; set; }
 
-        public IActionResult OnGet(int? customerId)
+        public async Task<IActionResult> OnGetAsync(int? customerId)
         {
             if (customerId == null && _signInManager.IsSignedIn(User))
             {
-                var UserEmail = User.FindFirst(ClaimTypes.Email).Value;
-                var customer = _dbContext.Customers.Include(a => a.Accounts).FirstOrDefault(x => x.EmailAddress == UserEmail);
+                var UserEmail = User.FindFirstValue(ClaimTypes.Email);
+                var customer = await _dbContext.Customers.Include(a => a.Accounts).FirstOrDefaultAsync(x => x.EmailAddress == UserEmail);
+
                 ViewModelAccounts = new CustomerAccountViewModel
                 {
                     Id = customer.Id,

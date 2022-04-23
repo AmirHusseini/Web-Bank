@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using Web_Bank.Data;
-
+using Web_Bank.ViewModels;
 
 namespace Web_Bank.Pages.Customer
 {
@@ -14,31 +15,24 @@ namespace Web_Bank.Pages.Customer
         {
             _dbContext = dbContext;
         }
+        public InputViewModel customer { get; set; }        
 
-        public int Id { get; set; }
-        [MaxLength(50)]
-        public string Givenname { get; set; }
-        [MaxLength(50)]
-        public string Surname { get; set; }
-        [MaxLength(20)]
-        public string NationalId { get; set; }
-        public string EmailAddress { get; set; }
-
-        
-
-        public IActionResult OnGet(int customerId)
+        public async Task<IActionResult> OnGetAsync(int? customerId)
         {
             if (customerId == null)
             {
                 return NotFound();
             }
 
-            var customer = _dbContext.Customers.Find(customerId);
-            Givenname = customer.Givenname;
-            Surname = customer.Surname;
-            EmailAddress = customer.EmailAddress;
-            NationalId = customer.NationalId;
-            Id = customer.Id;
+            customer = await _dbContext.Customers.Select (a => new InputViewModel
+            {
+                Givenname = a.Givenname,
+                Surname = a.Surname,
+                EmailAddress = a.EmailAddress,
+                NationalId = a.NationalId,
+                Id = a.Id
+
+            }).FirstAsync(c => c.Id == customerId);
 
             if (customer == null)
             {
@@ -46,22 +40,24 @@ namespace Web_Bank.Pages.Customer
             }
             return Page();
         }
-        public IActionResult OnPostAsync(int customerId)
+        public async Task<IActionResult> OnPostAsync(int? customerId)
         {
             if (customerId == null)
             {
                 return NotFound();
             }
 
-            var customer = _dbContext.Customers.Find(customerId);
+            var currentcustomer = await _dbContext.Customers.FindAsync(customerId);
 
-            if (customer != null)
+            if (currentcustomer != null)
             {
-                _dbContext.Customers.Remove(customer);
-                _dbContext.SaveChanges();
+                _dbContext.Customers.Remove(currentcustomer);
+                await _dbContext.SaveChangesAsync();
+
+                return RedirectToPage("./Index");
             }
 
-            return RedirectToPage("./Index");
+            return Page();
         }
     }
 }

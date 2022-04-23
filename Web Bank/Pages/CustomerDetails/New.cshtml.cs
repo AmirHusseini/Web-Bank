@@ -2,10 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Web_Bank.Data;
 using Web_Bank.ViewModels;
-using System.ComponentModel.DataAnnotations;
+
 
 namespace Web_Bank.Pages.Customer
-{   [BindProperties]
+{   
+    
     public class NewModel : PageModel
     {
         private readonly ApplicationDbContext _dbContext;
@@ -14,60 +15,42 @@ namespace Web_Bank.Pages.Customer
         {
             _dbContext = dbContext;
         }
-
-        public int Id { get; set; }
-        [MaxLength(50)]
-        public string Givenname { get; set; }
-        [MaxLength(50)]
-        public string Surname { get; set; }
-        [MaxLength(50)]
-        public string Streetaddress { get; set; }
-        [MaxLength(50)]
-        public string City { get; set; }
-        [MaxLength(10)]
-        public string Zipcode { get; set; }
-        [MaxLength(30)]
-        public string Country { get; set; }
-        [MaxLength(2)]
-        public string CountryCode { get; set; }
-        [MaxLength(20)]
-        public string NationalId { get; set; }
-        [Range(0, 9999)]
-        public int TelephoneCountryCode { get; set; }
-        public string Telephone { get; set; }
-        [MaxLength(50)]
-        public string EmailAddress { get; set; }
-        public DateTime Birthday { get; set; }       
+        
+        [BindProperty]
+        public InputViewModel Input { get; set; }        
 
         public void OnGet()
         {
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return Page();
+                var newcustomer = new Data.Customer()
+                {
+                    Givenname = Input.Givenname,
+                    Surname = Input.Surname,
+                    EmailAddress = Input.EmailAddress,
+                    Birthday = Input.Birthday,
+                    City = Input.City,
+                    Country = Input.Country,
+                    CountryCode = Input.CountryCode,
+                    NationalId = Input.NationalId,
+                    Telephone = Input.Telephone,
+                    Streetaddress = Input.Streetaddress,
+                    TelephoneCountryCode = Input.TelephoneCountryCode,
+                    Zipcode = Input.Zipcode,
+                };
+                _dbContext.Customers.Add(newcustomer);
+
+                await _dbContext.SaveChangesAsync();
+                return RedirectToPage("./Index");
+                
             }
-            var customer = new Data.Customer();
 
-            customer.Givenname = Givenname;
-            customer.Surname = Surname;
-            customer.Streetaddress = Streetaddress;
-            customer.City = City;
-            customer.Country = Country;
-            customer.CountryCode = CountryCode;
-            customer.Telephone = Telephone;
-            customer.TelephoneCountryCode = TelephoneCountryCode;
-            customer.EmailAddress = EmailAddress;
-            customer.Birthday = Birthday;
-            customer.Id = Id;
-            customer.NationalId = NationalId;
-            customer.Zipcode = Zipcode;
+            return Page();
 
-            _dbContext.Customers.Add(customer);
-            _dbContext.SaveChanges();
-            return RedirectToPage("./Index");
         }
     }
 }

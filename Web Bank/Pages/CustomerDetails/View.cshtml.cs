@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using Web_Bank.Data;
-
+using Web_Bank.ViewModels;
 
 namespace Web_Bank.Pages.Customer
 {
@@ -15,47 +16,31 @@ namespace Web_Bank.Pages.Customer
             _dbContext = dbContext;
         }
 
-        public int Id { get; set; } 
-        [MaxLength(50)]
-        public string Givenname { get; set; }
-        [MaxLength(50)]
-        public string Surname { get; set; }
-        [MaxLength(50)]
-        public string Streetaddress { get; set; }
-        [MaxLength(50)]
-        public string City { get; set; }
-        [MaxLength(10)]
-        public string Zipcode { get; set; }
-        [MaxLength(30)]
-        public string Country { get; set; }
-        [MaxLength(20)]
-        public string NationalId { get; set; }        
-        public string Telephone { get; set; }
-        [MaxLength(50)]
-        public string EmailAddress { get; set; }
-        public DateTime Birthday { get; set; }
+        public InputViewModel customer { get; set; }
 
-        
 
-        public IActionResult OnGetAsync(int customerId)
+
+        public async Task<IActionResult> OnGetAsync(int? customerId)
         {
             if (customerId == null)
             {
                 return NotFound();
             }
 
-            var customer = _dbContext.Customers.Find(customerId);
-            Givenname = customer.Givenname;
-            Surname = customer.Surname;
-            Streetaddress = customer.Streetaddress;
-            City = customer.City;
-            Country = customer.Country;
-            Telephone = customer.Telephone;
-            EmailAddress = customer.EmailAddress;
-            Birthday = customer.Birthday;
-            NationalId = customer.NationalId;
-            Zipcode = customer.Zipcode;
-            Id = customer.Id;
+            customer = await _dbContext.Customers.Select(a => new InputViewModel
+            {
+                Id = a.Id,
+                Givenname = a.Givenname,
+                Surname = a.Surname,
+                Streetaddress = a.Streetaddress,
+                City = a.City,
+                Country = a.Country,
+                Telephone = a.Telephone,
+                EmailAddress = a.EmailAddress,
+                Birthday = a.Birthday,
+                NationalId = a.NationalId,
+                Zipcode = a.Zipcode
+            }).FirstAsync(c => c.Id == customerId);            
 
             if (customer == null)
             {

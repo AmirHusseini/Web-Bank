@@ -9,9 +9,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Web_Bank.Data;
+using Web_Bank.ViewModels;
 
 namespace Web_Bank.Pages.Customers
-{   [BindProperties]
+{   
+    [BindProperties]
     public class EditModel : PageModel
     {
         private readonly ApplicationDbContext _dbContext;
@@ -21,41 +23,60 @@ namespace Web_Bank.Pages.Customers
             _dbContext = dbContext;
         }
 
-        [MaxLength(50)]
+        [Display(Name = "Given Name")]
+        [Required]
+        [StringLength(30, MinimumLength = 2)]
         public string Givenname { get; set; }
-        [MaxLength(50)]
+
+        [Required]
+        [StringLength(30, MinimumLength = 2)]
         public string Surname { get; set; }
+
+        [Display(Name = "Street Address")]
+        [Required]
         [MaxLength(50)]
         public string Streetaddress { get; set; }
+
+        [Required]
         [MaxLength(50)]
         public string City { get; set; }
+
+        [Display(Name = "Zip Code")]
+        [Required]
         [MaxLength(10)]
         public string Zipcode { get; set; }
+
+        [Required]
         [MaxLength(30)]
         public string Country { get; set; }
+
+        [Required]
+        [DataType(DataType.PhoneNumber)]
         public string Telephone { get; set; }
-        [MaxLength(50)]
+
+        [Display(Name = "Email Address")]
+        [Required]
+        [DataType(DataType.EmailAddress)]
+
         public string EmailAddress { get; set; }
-
-
-        public IActionResult OnGet(int customerId)
+        public async Task<IActionResult> OnGetAsync(int? customerId)
         {
             if (customerId == null)
             {
                 return NotFound();
             }
+            var currentcustomer = await _dbContext.Customers.FirstAsync(c => c.Id == customerId);
 
-            var customer = _dbContext.Customers.Find(customerId);
-            Givenname = customer.Givenname;
-            Surname = customer.Surname;
-            Streetaddress = customer.Streetaddress;
-            City = customer.City;
-            Country = customer.Country;
-            Telephone = customer.Telephone;
-            EmailAddress = customer.EmailAddress;
-            Zipcode = customer.Zipcode;
+            Givenname = currentcustomer.Givenname;
+            Surname = currentcustomer.Surname;
+            Streetaddress = currentcustomer.Streetaddress;
+            City = currentcustomer.City;
+            Country = currentcustomer.Country;
+            Telephone = currentcustomer.Telephone;
+            EmailAddress = currentcustomer.EmailAddress;
+            Zipcode = currentcustomer.Zipcode;                                                                               
 
-            if (customer == null)
+            if (currentcustomer == null)
             {
                 return NotFound();
             }
@@ -63,45 +84,54 @@ namespace Web_Bank.Pages.Customers
         }
 
         
-        public IActionResult OnPost(int customerId)
+        public async Task<IActionResult> OnPostAsync(int customerId)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return Page();
-            }           
+                var currentcustomer = await _dbContext.Customers.FirstAsync(a => a.Id == customerId);
 
-            try
-            {
-                var customer = _dbContext.Customers.Find(customerId);
-                customer.Givenname = Givenname;
-                customer.Surname = Surname;
-                customer.Streetaddress = Streetaddress;
-                customer.City = City;
-                customer.Country = Country;
-                customer.Telephone = Telephone;
-                customer.EmailAddress = EmailAddress;
-                customer.Zipcode = Zipcode;
-                _dbContext.Customers.Update(customer);
-                _dbContext.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CustomerExists(customerId))
+                if (currentcustomer == null)
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
-            }
+                
+                currentcustomer.Givenname = Givenname;
+                currentcustomer.Surname = Surname;
+                currentcustomer.Streetaddress = Streetaddress;
+                currentcustomer.City = City;
+                currentcustomer.Country = Country;
+                currentcustomer.Telephone = Telephone;
+                currentcustomer.EmailAddress = EmailAddress;
+                currentcustomer.Zipcode = Zipcode;               
 
-            return RedirectToPage("./Index");
+                _dbContext.Customers.Update(currentcustomer);
+                await _dbContext.SaveChangesAsync();
+
+                return RedirectToPage("./Index");
+            }           
+
+            //try
+            //{
+                
+            //}
+            //catch (DbUpdateConcurrencyException)
+            //{
+            //    if (!CustomerExists(customerId))
+            //    {
+            //        return NotFound();
+            //    }
+            //    else
+            //    {
+            //        throw;
+            //    }
+            //}
+            return Page();
+            
         }
-        public bool CustomerExists(int customerId)
-        {
-            return _dbContext.Customers.Any(e => e.Id == customerId);
-        }
+        //public bool CustomerExists(int customerId)
+        //{
+        //    return _dbContext.Customers.Any(e => e.Id == customerId);
+        //}
 
     }
 }
