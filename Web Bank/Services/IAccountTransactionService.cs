@@ -4,9 +4,11 @@ namespace Web_Bank.Services
 {
     public interface IAccountTransactionService
     {
-        public List<Account> GetAllAccounts();
-        public Account GetAccount(int accountId);
-        public Task WithdrawAsync(int accountId, int belopp);
-        public bool CanWithdraw(int accountId, int amount);
+        List<Account> GetAllAccounts(int? customerId);
+        Account GetAccount(int accountId);
+        Task WithdrawAsync(int accountId, int belopp);
+        bool CanWithdraw(int accountId, int amount);
+        bool CanDeposit(string operation, int accountId, int amount);
+        Task DepositAsync(string operation, int accountId, int amount);
     }
 }

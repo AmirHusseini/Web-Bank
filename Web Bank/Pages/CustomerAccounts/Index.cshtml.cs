@@ -56,7 +56,7 @@ namespace Web_Bank.Pages.CustomerAccounts
                     Surname = customer.Surname,
                     Accounts = customer.Accounts
                 };
-                Total = customer.Accounts.Sum(a => a.Balance);
+                Total = ((int)customer.Accounts.Sum(a => a.Balance));
                 return Page();
             }
             //else

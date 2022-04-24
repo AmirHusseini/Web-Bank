@@ -7,33 +7,42 @@
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item active">Customer's AccountNr: @Model.ViewModelAccounts.Id</li>
     </ol>
-    <div class="col-xl-3 col-md-6">
-        <div class="card bg-success text-white mb-4">
-            <div class="card-body">
-                <h5 class="card-title">Total Balance</h5>
-                 <p class="card-text">@Model.Total $</p>
-            </div>                
+    <div class="row justify-content-between">
+        <div class="col-5">
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-success text-white mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Balance</h5>
+                         <p class="card-text">@Model.Total $</p>
+                    </div>                
+                </div>
+            </div>
+        </div>
+        <div class="col-7">
+            <a asp-route-customerId = "@Model.ViewModelAccounts.Id" asp-page="./Withdraw"><input class= "btn btn-dark" value="Withdraw"/></a>
+            <a asp-route-customerId = "@Model.ViewModelAccounts.Id" asp-page="./Deposit"><input class= "btn btn-dark" value="Deposit"/></a>
+            <a asp-route-customerId = "@Model.ViewModelAccounts.Id" asp-page="./Transfer"><input class= "btn btn-dark" value="Transfer"/></a>
         </div>
     </div>
-    
     <div class="row">
         @foreach (var item in @Model.ViewModelAccounts.Accounts)
         {
             <div class="col-xl-4 col-md-6">
-            <div class="card bg-primary text-white mb-4">
-                <div class="card-body">@item.AccountType</div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" asp-route-accountId ="@item.Id" asp-page="/CustomerAccounts/Transactions">See Transactions @item.Balance $</a>
-                    
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                    
+            <div class="card text-center mb-4">
+                <div class="card-header bg-info">
+                    @item.AccountType
                 </div>
+                <div class="card-body">
+                    <h5 class="card-title"> @((int)item.Balance) $ </h5>
+                    <a class="small stretched-link" asp-route-accountId ="@item.Id" asp-page="/CustomerAccounts/Transactions">See Transactions</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+                <div class="card-footer text-muted">
+                    Account created: @item.Created
+                  </div>
             </div>
         </div>
-        <div class="card-footer d-flex align-items-center justify-content-between">
-        <a asp-route-customerId = "@Model.ViewModelAccounts.Id" asp-page="./Withdraw">Withdraw</a>
-        </div>
+        
         }       
-    </div>
-    
+    </div>                   
 </div>
