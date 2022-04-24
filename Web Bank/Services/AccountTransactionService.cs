@@ -24,24 +24,26 @@ namespace Web_Bank.Services
         }
        
 
-        public void Withdraw(int accountId, int amount)
+        public async Task WithdrawAsync(int accountId, int amount)
         {
-            var account = _dbContext.Accounts.FirstOrDefault(a => a.Id == accountId);
-                    
-            account.Balance -= amount;
-
-            var transaction = new Transaction
+            var account = await _dbContext.Accounts.Include(t => t.Transactions).FirstOrDefaultAsync(a => a.Id == accountId);
+            if (account != null)
             {
-                Amount = amount,
-                Date = DateTime.Now,
-                NewBalance = account.Balance,
-                Operation = "ATM withdrawal",
-                Type = "Credit"
-            };
+                account.Balance -= amount;
 
-            _dbContext.Accounts.Update(account);
-            _dbContext.Accounts.FirstOrDefault(a => a.Id == accountId).Transactions.Add(transaction);
-            _dbContext.SaveChanges();
+                var transaction = new Transaction
+                {
+                    Amount = amount,
+                    Date = DateTime.Now,
+                    NewBalance = account.Balance,
+                    Operation = "ATM withdrawal",
+                    Type = "Credit"
+                };
+                            
+                 account.Transactions.Add(transaction);
+                 await _dbContext.SaveChangesAsync();
+            }      
+            
         }
         public bool CanWithdraw(int accountId, int amount)
         {
@@ -49,7 +51,7 @@ namespace Web_Bank.Services
             
             if (amount <= 0)
             {
-
+                
                 return false;
 
             }

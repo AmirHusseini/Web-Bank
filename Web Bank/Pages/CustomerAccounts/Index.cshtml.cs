@@ -48,7 +48,7 @@ namespace Web_Bank.Pages.CustomerAccounts
 
             else /*if (User.IsInRole("Admin"))*/
             {
-                var customer = _dbContext.Customers.Include(a => a.Accounts).FirstOrDefault(x => x.Id == customerId);
+                var customer = await _dbContext.Customers.Include(a => a.Accounts).FirstOrDefaultAsync(x => x.Id == customerId);
                 ViewModelAccounts = new CustomerAccountViewModel
                 {
                     Id = customer.Id,
