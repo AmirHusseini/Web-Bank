@@ -7,6 +7,7 @@ using Web_Bank.ViewModels;
 
 namespace Web_Bank.Pages.CustomerAccounts
 {
+    [BindProperties]
     public class TransactionsModel : PageModel
     {
         private readonly ApplicationDbContext _dbContext;
@@ -16,14 +17,19 @@ namespace Web_Bank.Pages.CustomerAccounts
             _dbContext = dbContext;
         }
         public List<TransactionsViewModel> AllTransactions { get; set; }
+        public int AccountId { get; set; }
 
         public void OnGet(int accountId)
-        {            
-            
+        {
+             AccountId = accountId;
+        }
+        public JsonResult OnGetFetchInfo(int id)
+        {
+
             AllTransactions = _dbContext.Accounts
                 .Include(x => x.Transactions)
-                .FirstOrDefault(a => a.Id == accountId).Transactions
-                
+                .FirstOrDefault(a => a.Id == id).Transactions
+
                 .Select(t => new TransactionsViewModel
                 {
                     Id = t.Id,
@@ -31,9 +37,10 @@ namespace Web_Bank.Pages.CustomerAccounts
                     Operation = t.Operation,
                     Date = t.Date,
                     Amount = t.Amount,
-                    NewBalance = t.NewBalance                    
+                    NewBalance = t.NewBalance
                 }).OrderByDescending(a => a.Date).ToList();
-            
+            return new JsonResult (AllTransactions);
         }
+
     }
 }

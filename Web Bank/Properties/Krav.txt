@@ -6,15 +6,15 @@
 
 
 
-- Grundprinciper kring "best practices", framförallt ViewModels . Jag vill inte se någon databasentitet i vyer 
+ 
 
-- Vissa saker nämner jag inte specifikt, tex förutsätter jag att du implementerar inputvalidering etc. Detta är ett RIKTIGT system med "dumma" användare. Att du programmerar mot Interface och inte faktiska implementationer är en annan självklarhet
 
-- Startsida: skriv ut statistik på startsidan. Du ska se antal kunder, antal konton och summan av saldot på konton. 
 
-Det ska gå att ta fram en kundbild genom att ange kundnummer. Kundbilden ska visa all information om kunden och alla kundens konton. Kundbilden ska också visa det totala saldot för kunden genom att summera saldot på kundens konton.
+ 
 
-Det ska gå att söka efter kund på namn och stad. En lista ska visas med kundnummer och personnummer, namn, adress, city som sökresultat. Sökresultatet ska vara paginerat (50 resultat i taget och så ska man kunna bläddra till nästa/tidigare sida). Klickar man på en kund ska man komma till kundbilden.
+
+
+
 
 Lägg till en kontobild där man kan se transaktioner för ett individuellt konto. När man klickar på ett kontonummer i kundbilden ska man komma till en kontosida som visar kontonummer och saldo samt en lista med transaktioner i descending order. Om det finns fler än 20 transaktioner ska JavaScript/AJAX användas för att ladda in ytterligare 20 transaktioner när man trycker på en knapp längst ned i listan. Trycker man igen laddas 20 till, och så vidare.
 
@@ -45,3 +45,8 @@ Driftsätt din lösning och databas till Azure.
 
 --Du ska i grunden utgå från den databas (DBContext + seed data) som ingår i startprojektet.
 -- Bygg ett webbgränssnitt med ASP.NET Core Razor Pages. Ladda ner en ”FREE BOOTSTRAP TEMPLATE” och modifiera layout etc så den används!   Alt skapa CSS från grunden själv. Men jag vill att sajten ska se ”bra” ut!
+-- Startsida: skriv ut statistik på startsidan. Du ska se antal kunder, antal konton och summan av saldot på konton.
+*- Grundprinciper kring "best practices", framförallt ViewModels . Jag vill inte se någon databasentitet i vyer
+*- Vissa saker nämner jag inte specifikt, tex förutsätter jag att du implementerar inputvalidering etc. Detta är ett RIKTIGT system med "dumma" användare. Att du programmerar mot Interface och inte faktiska implementationer är en annan självklarhet
+*- Det ska gå att ta fram en kundbild genom att ange kundnummer. Kundbilden ska visa all information om kunden och alla kundens konton. Kundbilden ska också visa det totala saldot för kunden genom att summera saldot på kundens konton.
+*- Det ska gå att söka efter kund på namn och stad. En lista ska visas med kundnummer och personnummer, namn, adress, city som sökresultat. Sökresultatet ska vara paginerat (50 resultat i taget och så ska man kunna bläddra till nästa/tidigare sida). Klickar man på en kund ska man komma till kundbilden.

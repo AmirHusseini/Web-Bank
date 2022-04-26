@@ -1,32 +1,85 @@
-﻿@page
+﻿@page "{accountId?}"
 @model Web_Bank.Pages.CustomerAccounts.TransactionsModel
 @{
 }
+
 <div class="container-fluid px-4">
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Id</th>
-      <th scope="col">Type</th>
-      <th scope="col">Operation</th>
-      <th scope="col">Date</th>
-      <th scope="col">Amount</th>
-      <th scope="col">NewBalance</th>
-    </tr>
-  </thead>
-  <tbody>
-      
-    @foreach (var item in @Model.AllTransactions)
-    {
+    <input id="accountid" type="hidden" asp-for= "@Model.AccountId"/>
+        
+    <table id="table" class="table">
+    <thead>
         <tr>
-            <td>@item.Id</td>
-            <td>@item.Type</td>
-            <td>@item.Operation</td>
-            <td>@item.Date</td>
-            <td>@item.Amount</td>
-            <td>@item.NewBalance</td>
+            <th data-field="field1">Id</th>
+            <th data-field="field2">Type</th>
+            <th data-field="field3">Operation</th>
+            <th data-field="field1">Date</th>
+            <th data-field="field2">Amount</th>
+            <th data-field="field3">New Balance</th>
         </tr>
-    }   
-  </tbody>
-</table>
+    </thead>
+    <tbody id = "tbody">
+        
+    </tbody>
+
+    </table>
+    <input type="button" value="view more" id="btnShowMoreLess" />
 </div>
+
+@section Scripts{
+        <script>
+            $(function () {
+                getdata();
+                            
+            });
+            function getdata() {
+                var ids = $('#accountid').val();
+                $.ajax({
+                    type: "GET",
+                    url: "/CustomerAccounts/Transactions?handler=FetchInfo&id=" + ids,
+                    contentType:'Application/json',
+                    dataType: "json",
+                    success: function (data) {
+                        
+                        console.log(data);
+                        var tbody = $('#tbody');
+                        var rows = "";
+                        
+                            for (var i = 0; i < data.length; i++) {
+                                rows = "<tr class=info><td>" + data[i].id + "</td>"
+                                     + "<td>" + data[i].type + "</td>"
+                                     + "<td>" + data[i].operation + "</td>"
+                                     + "<td>" + data[i].date + "</td>"
+                                     + "<td>" + data[i].amount + "</td>"
+                                     + "<td>" + data[i].newBalance + "</td> </tr>"
+                                     tbody.append(rows);
+                            }
+                        $("#table").find("tr:gt(20)").hide();
+                        var ss = $("#table").find('.info').length;
+                        
+                    },
+                    failure: function (response) { alert(response.d); },
+                    error: function (response) { alert(response.d); }
+                });
+                
+                
+                $('#btnShowMoreLess').on("click", function () {
+                    if ($(this).val() == 'view more') {
+                        $(this).val('view less');
+                        $('#table').each(function () {
+                            $(this).find("tr").show();
+                        });
+                    } else {
+                        $(this).val('view more');
+                        $('#table').each(function () {
+                            $(this).find("tr:gt(20)").hide();
+                        });
+                    }
+                });
+                    
+               
+                            
+                   
+                
+            }
+        </script>
+}
