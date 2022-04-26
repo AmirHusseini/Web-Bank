@@ -30,41 +30,79 @@ namespace Web_Bank.Pages.CustomerAccounts
 
         public async Task<IActionResult> OnGetAsync(int? customerId)
         {
-            if (customerId == null && _signInManager.IsSignedIn(User))
+            if (customerId == null)
             {
-                var UserEmail = User.FindFirstValue(ClaimTypes.Email);
-                var customer = await _dbContext.Customers.Include(a => a.Accounts).FirstOrDefaultAsync(x => x.EmailAddress == UserEmail);
-
-                ViewModelAccounts = new CustomerAccountViewModel
+                if (_signInManager.IsSignedIn(User))
                 {
-                    Id = customer.Id,
-                    Givenname = customer.Givenname,
-                    Surname = customer.Surname,
-                    Accounts = customer.Accounts
-                };
-                Total = customer.Accounts.Sum(a => a.Balance);
-                return Page();
-            }
+                    var UserEmail = User.FindFirstValue(ClaimTypes.Email);
+                    var customer = await _dbContext.Customers.Include(a => a.Accounts).FirstOrDefaultAsync(x => x.EmailAddress == UserEmail);
 
-            else /*if (User.IsInRole("Admin"))*/
-            {
-                var customer = await _dbContext.Customers.Include(a => a.Accounts).FirstOrDefaultAsync(x => x.Id == customerId);
-                ViewModelAccounts = new CustomerAccountViewModel
-                {
-                    Id = customer.Id,
-                    Givenname = customer.Givenname,
-                    Surname = customer.Surname,
-                    Accounts = customer.Accounts
-                };
-                Total = ((int)customer.Accounts.Sum(a => a.Balance));
-                return Page();
-            }
-            //else
-            //{
-            //    return LocalRedirect("/Identity/Account/AccessDenied");
+                    if (customer == null)
+                    {
+                        return NotFound();
+                    }
+
+                    ViewModelAccounts = new CustomerAccountViewModel
+                    {
+                        Id = customer.Id,
+                        Givenname = customer.Givenname,
+                        Surname = customer.Surname,
+                        Accounts = customer.Accounts
+                    };
+                    Total = customer.Accounts.Sum(a => a.Balance);
+                    
+                }
                 
-            //}
-            
+                return Page();
+
+            }
+            else if (customerId != null && _signInManager.IsSignedIn(User))
+            {
+                if (User.IsInRole("Admin"))
+                {
+                    var customer = await _dbContext.Customers.Include(a => a.Accounts).FirstOrDefaultAsync(x => x.Id == customerId);
+                    ViewModelAccounts = new CustomerAccountViewModel
+                    {
+                        Id = customer.Id,
+                        Givenname = customer.Givenname,
+                        Surname = customer.Surname,
+                        Accounts = customer.Accounts
+                    };
+                    Total = ((int)customer.Accounts.Sum(a => a.Balance));
+                    return Page();
+                }
+
+                else if (_signInManager.IsSignedIn(User))
+                {
+                    var customer = await _dbContext.Customers.Include(a => a.Accounts).FirstOrDefaultAsync(x => x.Id == customerId);
+                    var UserEmail = User.FindFirstValue(ClaimTypes.Email);
+
+                    if (customer.EmailAddress == UserEmail)
+                    {
+                        ViewModelAccounts = new CustomerAccountViewModel
+                        {
+                            Id = customer.Id,
+                            Givenname = customer.Givenname,
+                            Surname = customer.Surname,
+                            Accounts = customer.Accounts
+                        };
+                        Total = ((int)customer.Accounts.Sum(a => a.Balance));
+                        return Page();
+                    }
+                    else
+                    {
+                        return LocalRedirect("/Identity/Account/AccessDenied");
+                    }
+                }
+                return Page();             
+                
+            }
+            else
+            {
+                return LocalRedirect("/Identity/Account/AccessDenied");
+
+            }
+
         }    
     }
 }

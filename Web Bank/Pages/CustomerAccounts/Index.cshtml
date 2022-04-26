@@ -1,4 +1,6 @@
 ﻿@page
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
 @model Web_Bank.Pages.CustomerAccounts.IndexModel
 @{
 }
@@ -18,11 +20,14 @@
                 </div>
             </div>
         </div>
+        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+            {
         <div class="col-7">
             <a asp-route-customerId = "@Model.ViewModelAccounts.Id" asp-page="./Withdraw"><input class= "btn btn-dark" value="Withdraw"/></a>
             <a asp-route-customerId = "@Model.ViewModelAccounts.Id" asp-page="./Deposit"><input class= "btn btn-dark" value="Deposit"/></a>
             <a asp-route-customerId = "@Model.ViewModelAccounts.Id" asp-page="./Transfer"><input class= "btn btn-dark" value="Transfer"/></a>
         </div>
+            }
     </div>
     <div class="row">
         @foreach (var item in @Model.ViewModelAccounts.Accounts)
@@ -34,7 +39,7 @@
                 </div>
                 <div class="card-body">
                     <h5 class="card-title"> @((int)item.Balance) $ </h5>
-                    <a class="small stretched-link" asp-route-accountId ="@item.Id" asp-page="/CustomerAccounts/Transactions">See Transactions</a>
+                    <a class="small stretched-link" asp-route-customerId= "@Model.ViewModelAccounts.Id" asp-route-accountId ="@item.Id" asp-page="/CustomerAccounts/Transactions">See Transactions</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
                 <div class="card-footer text-muted">

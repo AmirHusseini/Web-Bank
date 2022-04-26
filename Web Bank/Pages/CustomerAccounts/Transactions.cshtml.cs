@@ -19,8 +19,11 @@ namespace Web_Bank.Pages.CustomerAccounts
         public List<TransactionsViewModel> AllTransactions { get; set; }
         public int AccountId { get; set; }
 
-        public void OnGet(int accountId)
+        public int CustomerId { get; set; }
+
+        public void OnGet(int accountId, int customerId)
         {
+             CustomerId = customerId;
              AccountId = accountId;
         }
         public JsonResult OnGetFetchInfo(int id)

@@ -23,12 +23,15 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("AdminCustomerPolicy", policy => policy.RequireRole("Admin", "Customer"));
 });
 
 
 builder.Services.AddRazorPages(options =>
 {
     options.Conventions.AuthorizeFolder("/Admin", "AdminPolicy");
+    options.Conventions.AuthorizeFolder("/CustomerDetails", "AdminPolicy");
+    options.Conventions.AuthorizeFolder("/CustomerAccounts", "AdminCustomerPolicy");
 });
 
 builder.Services.AddTransient<DataInitializer>();

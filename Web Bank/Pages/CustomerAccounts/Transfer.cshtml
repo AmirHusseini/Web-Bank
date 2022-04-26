@@ -2,3 +2,100 @@
 @model Web_Bank.Pages.CustomerAccounts.TransferModel
 @{
 }
+<div class="container">        
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="card shadow-lg border-0 rounded-lg mt-5">
+                <div class="card-header">
+                    <h3 class="text-center font-weight-light my-4">Deposit</h3>
+                </div>
+                <div class="card-body">
+                    <form class="row g-3" method="post" asp-page-handler="Update">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        
+                        <div class="form-floating mb-3">                           
+                            <select class="form-select" id="myDropdown" asp-items="Model.Accounts">
+                                <option selected>Select your account</option>
+                            </select>
+                            <input type="hidden" id ="accountidfrom" asp-for="@Model.AccountIdFrom"/>
+                            <label asp-for="@Model.Accounts">Account From</label>                                      
+                            <span asp-validation-for="AccountIdFrom" class="text-danger"></span>                            
+                        </div>
+                        <div class="input-group">
+                            <input class="form-control" type="text" value="This Account's' Balance is"  aria-label="" disabled readonly>
+                            <span class="input-group-text" id="balance"> $</span>                            
+                        </div>
+                                     
+                        <div class="form-floating mb-3">                           
+                            <select class="form-select" id="opDropdown" asp-items="Model.Accounts">
+                                <option selected>Select your operation</option>
+                            </select>
+                            <input type="hidden" id ="accountidto" asp-for="@Model.AccountIdTo"/>
+                            <label asp-for="@Model.Accounts">Account To</label>                                      
+                            <span asp-validation-for="AccountIdTo" class="text-danger"></span>    
+                        </div>
+                        
+                        <div class="input-group">
+                            <input class="form-control" type="text" value="This Account's' Balance is"  aria-label="" disabled readonly>
+                            <span class="input-group-text" id="andrabalance"> $</span>                            
+                        </div>
+
+                        <div class="form-floating mb-3">                            
+                          <input type="text" asp-for="Amount" class="form-control" aria-label="">
+                          <label asp-for="@Model.Amount"></label>
+                          <span asp-validation-for="Amount" class="text-danger"></span>                          
+                        </div>
+                        
+                        <input type="hidden" id ="customerid" asp-for="@Model.CustomerId"/>
+                        <div class="mt-4 mb-0 d-flex justify-content-center">
+                            <button type="submit" class="w-50 btn btn-lg btn-primary">Transfer</button>                                               
+                        </div>
+
+                    </form>
+                </div>
+                <div class="card-footer text-center py-3">
+                    <a asp-page="../CustomerDetails/Index">Back</a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        const select = document.getElementById('myDropdown');
+        
+
+        select.addEventListener('change', function handleChange(event) {
+          
+          selectedItem = select.options[select.selectedIndex].value;
+     
+          fetch('/CustomerAccounts/Transfer?handler=FetchInfo&accountid=' + selectedItem)
+          .then( response => response.json() )
+            .then( response => {
+
+                document.getElementById('balance').innerHTML= response.balance + " $";
+                document.getElementById('accountidfrom').value = response.currentaccountid;
+
+            } );
+
+        });
+        const andraselect = document.getElementById('opDropdown');
+        andraselect.addEventListener('change', function handleChange(event) {          
+          
+          andraselectedItem = andraselect.options[andraselect.selectedIndex].value;
+          console.log(andraselectedItem);
+
+          fetch('/CustomerAccounts/Transfer?handler=FetchInfo&accountid=' + andraselectedItem )
+          .then( response => response.json() )
+            .then( response => {
+
+                document.getElementById('andrabalance').innerHTML= response.balance + " $";
+                document.getElementById('accountidto').value = response.currentaccountid;
+            } );
+
+        });
+    </script>
+}
