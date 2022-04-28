@@ -7,15 +7,15 @@
 <div class="container-fluid px-4">
     <h1 class="mt-4">@Model.ViewModelAccounts.Surname @Model.ViewModelAccounts.Givenname</h1>
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">Customer's AccountNr: @Model.ViewModelAccounts.Id</li>
+        <li class="breadcrumb-item active">Customer's Number: @Model.ViewModelAccounts.Id</li>
     </ol>
     <div class="row justify-content-between">
         <div class="col-5">
             <div class="col-xl-3 col-md-6">
-                <div class="card bg-success text-white mb-4">
+                <div class="badge rounded-pill bg-info text-dark mb-4">
                     <div class="card-body">
                         <h5 class="card-title">Total Balance</h5>
-                         <p class="card-text">@Model.Total $</p>
+                         <h5 class="card-text">@Model.Total $</h5>
                     </div>                
                 </div>
             </div>
@@ -23,9 +23,9 @@
         @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
             {
         <div class="col-7">
-            <a asp-route-customerId = "@Model.ViewModelAccounts.Id" asp-page="./Withdraw"><input class= "btn btn-dark" value="Withdraw"/></a>
-            <a asp-route-customerId = "@Model.ViewModelAccounts.Id" asp-page="./Deposit"><input class= "btn btn-dark" value="Deposit"/></a>
-            <a asp-route-customerId = "@Model.ViewModelAccounts.Id" asp-page="./Transfer"><input class= "btn btn-dark" value="Transfer"/></a>
+            <a class="btn btn-danger" asp-route-customerId = "@Model.ViewModelAccounts.Id" asp-page="./Withdraw">Withdraw</a>
+            <a class="btn btn-success" asp-route-customerId = "@Model.ViewModelAccounts.Id" asp-page="./Deposit">Deposit</a>
+            <a class="btn btn-warning" asp-route-customerId = "@Model.ViewModelAccounts.Id" asp-page="./Transfer">Transfer</a>
         </div>
             }
     </div>

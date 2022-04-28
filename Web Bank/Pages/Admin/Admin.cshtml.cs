@@ -17,6 +17,7 @@ namespace Web_Bank.Pages.Admin
         {
             _dbContext = dbContext;
         }
+
         public List<RoleView> AllRoles { get; set; }
 
         public void OnGet()

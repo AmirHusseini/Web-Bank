@@ -15,19 +15,21 @@ namespace Web_Bank.Pages.Customer
             _dbContext = dbContext;
         }        
 
-        public List<InputViewModel> Customers { get; set; }
+        public List<CustomersViewModel> Customers { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync()
         {
 
-            Customers = await _dbContext.Customers.Select(e => new InputViewModel 
+            Customers = await _dbContext.Customers.Select(e => new CustomersViewModel 
             { 
                 Id = e.Id,
                 Givenname = e.Givenname,
                 Surname = e.Surname,
                 NationalId = e.NationalId,
                 Streetaddress = e.Streetaddress,
-                City = e.City
+                City = e.City,
+                EmailAddress = e.EmailAddress,
+                Telephone = e.Telephone
                  
             }).ToListAsync();
 

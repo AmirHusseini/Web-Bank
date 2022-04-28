@@ -13,11 +13,12 @@ namespace Web_Bank.Pages.Admin
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-
-        public ManageUserRolesModel(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        private readonly ApplicationDbContext _dbContext;
+        public ManageUserRolesModel(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext dbContext)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _dbContext = dbContext;
         }
 
         [BindProperty]
@@ -53,6 +54,7 @@ namespace Web_Bank.Pages.Admin
                 ModelState.AddModelError("", "Cannot add selected roles to user");
                 return Page();
             }
+            await _dbContext.SaveChangesAsync();
             return RedirectToPage("./UserRoles", userId);
         }
         public async Task<List<ManageUserRoles>> GetAllAsync(string nuserId)

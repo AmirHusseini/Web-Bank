@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using Web_Bank.Data;
 using Web_Bank.ViewModels;
+using Web_Bank.ViewModels.Customer;
 
 namespace Web_Bank.Pages.Customer
 {
@@ -16,7 +17,7 @@ namespace Web_Bank.Pages.Customer
             _dbContext = dbContext;
         }
 
-        public InputViewModel customer { get; set; }
+        public DetailsCustomerViewModel customer { get; set; }
 
 
 
@@ -27,7 +28,7 @@ namespace Web_Bank.Pages.Customer
                 return NotFound();
             }
 
-            customer = await _dbContext.Customers.Select(a => new InputViewModel
+            customer = await _dbContext.Customers.Select(a => new DetailsCustomerViewModel
             {
                 Id = a.Id,
                 Givenname = a.Givenname,

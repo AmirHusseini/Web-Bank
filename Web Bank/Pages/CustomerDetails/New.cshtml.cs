@@ -17,7 +17,7 @@ namespace Web_Bank.Pages.Customer
         }
         
         [BindProperty]
-        public InputViewModel Input { get; set; }        
+        public NewCustomerViewModel Input { get; set; }        
 
         public void OnGet()
         {

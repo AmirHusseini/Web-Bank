@@ -30,18 +30,15 @@ namespace Web_Bank.Pages.CustomerAccounts
 
         public async Task<IActionResult> OnGetAsync(int? customerId)
         {
-            if (customerId == null)
+            if (customerId == null && _signInManager.IsSignedIn(User))
             {
-                if (_signInManager.IsSignedIn(User))
+                
+                var UserEmail = User.FindFirstValue(ClaimTypes.Email);
+                var customer = await _dbContext.Customers.Include(a => a.Accounts).FirstOrDefaultAsync(x => x.EmailAddress == UserEmail);
+
+                if (customer != null)
                 {
-                    var UserEmail = User.FindFirstValue(ClaimTypes.Email);
-                    var customer = await _dbContext.Customers.Include(a => a.Accounts).FirstOrDefaultAsync(x => x.EmailAddress == UserEmail);
-
-                    if (customer == null)
-                    {
-                        return NotFound();
-                    }
-
+                    
                     ViewModelAccounts = new CustomerAccountViewModel
                     {
                         Id = customer.Id,
@@ -52,32 +49,21 @@ namespace Web_Bank.Pages.CustomerAccounts
                     Total = customer.Accounts.Sum(a => a.Balance);
                     
                 }
-                
-                return Page();
+                else
+                {
+                    return NotFound();
+                }                                                   
+                                
 
             }
-            else if (customerId != null && _signInManager.IsSignedIn(User))
-            {
-                if (User.IsInRole("Admin"))
-                {
-                    var customer = await _dbContext.Customers.Include(a => a.Accounts).FirstOrDefaultAsync(x => x.Id == customerId);
-                    ViewModelAccounts = new CustomerAccountViewModel
-                    {
-                        Id = customer.Id,
-                        Givenname = customer.Givenname,
-                        Surname = customer.Surname,
-                        Accounts = customer.Accounts
-                    };
-                    Total = ((int)customer.Accounts.Sum(a => a.Balance));
-                    return Page();
-                }
+            else if (customerId != null && _signInManager.IsSignedIn(User) || User.IsInRole("Admin"))
+            {                
+                var customer = await _dbContext.Customers.Include(a => a.Accounts).FirstOrDefaultAsync(x => x.Id == customerId);
+                var customeremail = User.FindFirstValue(ClaimTypes.Email);
 
-                else if (_signInManager.IsSignedIn(User))
+                if (customer != null)
                 {
-                    var customer = await _dbContext.Customers.Include(a => a.Accounts).FirstOrDefaultAsync(x => x.Id == customerId);
-                    var UserEmail = User.FindFirstValue(ClaimTypes.Email);
-
-                    if (customer.EmailAddress == UserEmail)
+                    if (User.IsInRole("Admin"))
                     {
                         ViewModelAccounts = new CustomerAccountViewModel
                         {
@@ -87,14 +73,25 @@ namespace Web_Bank.Pages.CustomerAccounts
                             Accounts = customer.Accounts
                         };
                         Total = ((int)customer.Accounts.Sum(a => a.Balance));
-                        return Page();
+                    }
+                    else if (customer.EmailAddress == customeremail)
+                    {
+                        ViewModelAccounts = new CustomerAccountViewModel
+                        {
+                            Id = customer.Id,
+                            Givenname = customer.Givenname,
+                            Surname = customer.Surname,
+                            Accounts = customer.Accounts
+                        };
+                        Total = ((int)customer.Accounts.Sum(a => a.Balance));
                     }
                     else
                     {
                         return LocalRedirect("/Identity/Account/AccessDenied");
                     }
                 }
-                return Page();             
+                
+                                                          
                 
             }
             else
@@ -102,7 +99,7 @@ namespace Web_Bank.Pages.CustomerAccounts
                 return LocalRedirect("/Identity/Account/AccessDenied");
 
             }
-
+            return Page();
         }    
     }
 }

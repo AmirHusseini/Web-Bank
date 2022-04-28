@@ -32,6 +32,7 @@ namespace Web_Bank.Pages.CustomerAccounts
 
         
         public string OperationId { get; set; }
+
         public int CustomerId { get; set; }
 
         public List<SelectListItem> Accounts { get; set; }
@@ -47,7 +48,7 @@ namespace Web_Bank.Pages.CustomerAccounts
                 if (customer != null)
                 {
                     CustomerId = customer.Id;
-                    GetAccounts(CustomerId);
+                    GetAccounts(customer.Id);
                     GetOperations();
                     return Page();
                 }
@@ -59,6 +60,8 @@ namespace Web_Bank.Pages.CustomerAccounts
             }
             else if (User.IsInRole("Admin"))
             {
+
+                CustomerId = (int)customerId;
                 GetAccounts(customerId);
                 GetOperations();
                 return Page();
@@ -88,7 +91,8 @@ namespace Web_Bank.Pages.CustomerAccounts
                 Operation.Add(new SelectListItem()
                 {
                     Value = item.ToString(),
-                    Text = item.ToString()
+                    Text =  item.ToString(),
+                    
                 });
             }
             return Operation;
@@ -116,8 +120,19 @@ namespace Web_Bank.Pages.CustomerAccounts
         }
         public async Task<IActionResult> OnPostUpdateAsync(string operationId, int accountId, int amount, int customerId)
         {
+            if (operationId == "Select your operation")
+            {
+                ModelState.AddModelError("OperationId", "You must choose an option");
+                GetAccounts(customerId);
+                GetOperations();
+                return Page();
+            }
             if (ModelState.IsValid)
             {
+                if (operationId == "Depositcash")
+                {
+                    operationId = "Deposit Cash";
+                }
                 if (_transactionService.CanDeposit(operationId, accountId, amount))
                 {
                     await _transactionService.DepositAsync(operationId, accountId, amount);

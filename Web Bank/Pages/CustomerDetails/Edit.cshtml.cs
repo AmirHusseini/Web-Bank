@@ -1,18 +1,12 @@
 ﻿#nullable disable
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Web_Bank.Data;
-using Web_Bank.ViewModels;
 
 namespace Web_Bank.Pages.Customers
-{   
+{
     [BindProperties]
     public class EditModel : PageModel
     {
@@ -57,15 +51,16 @@ namespace Web_Bank.Pages.Customers
         [Display(Name = "Email Address")]
         [Required]
         [DataType(DataType.EmailAddress)]
-
         public string EmailAddress { get; set; }
+
         public async Task<IActionResult> OnGetAsync(int? customerId)
         {
-            if (customerId == null)
+            var currentcustomer = await _dbContext.Customers.FirstAsync(c => c.Id == customerId);
+
+            if (currentcustomer == null)
             {
                 return NotFound();
             }
-            var currentcustomer = await _dbContext.Customers.FirstAsync(c => c.Id == customerId);
 
             Givenname = currentcustomer.Givenname;
             Surname = currentcustomer.Surname;
@@ -75,17 +70,14 @@ namespace Web_Bank.Pages.Customers
             Telephone = currentcustomer.Telephone;
             EmailAddress = currentcustomer.EmailAddress;
             Zipcode = currentcustomer.Zipcode;                                                                               
-
-            if (currentcustomer == null)
-            {
-                return NotFound();
-            }
+            
             return Page();
         }
 
         
         public async Task<IActionResult> OnPostAsync(int customerId)
         {
+            
             if (ModelState.IsValid)
             {
                 var currentcustomer = await _dbContext.Customers.FirstAsync(a => a.Id == customerId);

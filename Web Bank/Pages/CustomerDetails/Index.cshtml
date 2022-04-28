@@ -18,7 +18,9 @@
                         <th>ID</th>
                         <th>Given Name</th>
                         <th>Surname</th>
-                        <th>NationalId</th> 
+                        <th>NationalId</th>
+                        <th>Telephone</th>
+                        <th>Email Address</th>
                         <th>Street Address</th>
                         <th>City</th>
                         <th>Accounts</th>
@@ -31,11 +33,14 @@
                 <tbody>
                     @foreach (var customer in Model.Customers)
                     {
+                        
                     <tr>
                         <td>@customer.Id</td>
                         <td>@customer.Givenname</td>
                         <td>@customer.Surname</td>
                         <td>@customer.NationalId</td>
+                        <td>@customer.Telephone</td>
+                        <td>@customer.EmailAddress</td>                        
                         <td>@customer.Streetaddress</td>
                         <td>@customer.City</td>
                         <td><a asp-page="../CustomerAccounts/Index" asp-route-customerId="@customer.Id"><i class='bx bxs-bank'></i></a></td>

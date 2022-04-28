@@ -10,12 +10,12 @@ namespace Web_Bank.Pages.Admin
     public class UserRolesModel : PageModel
     {
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly ApplicationDbContext _dbContext;
 
-
-        public UserRolesModel(UserManager<IdentityUser> userManager)
+        public UserRolesModel(UserManager<IdentityUser> userManager, ApplicationDbContext dbContext)
         {
             _userManager = userManager;
-
+            _dbContext = dbContext;
         }
         public List<UserRolesView> userRolesViews { get; set; } = new List<UserRolesView>();
         public async Task<IActionResult> OnGet()
