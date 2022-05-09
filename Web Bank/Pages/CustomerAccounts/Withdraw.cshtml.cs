@@ -99,12 +99,13 @@ namespace Web_Bank.Pages.CustomerAccounts
                 if (_transactionService.CanWithdraw(accountId, amount))
                 {
                     await _transactionService.WithdrawAsync(accountId, amount);
-                    return RedirectToPage("./Transactions", new { accountId = accountId });
+                    return RedirectToPage("./Transactions", new {CustomerId = customerId, accountId = accountId });
                 }                           
                 
             }
             else
             {
+                CustomerId = customerId;
                 GetAccounts(customerId);
                 return Page();
             }

@@ -10,7 +10,8 @@ namespace Web_Bank.ViewModels
         public string Givenname { get; set; }
         [MaxLength(50)]
         public string Surname { get; set; }
-
+        [MaxLength(50)]
+        public string photo { get; set; }
         public List<Account> Accounts { get; set; } = new List<Account>();
         
     }

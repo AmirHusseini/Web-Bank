@@ -44,7 +44,9 @@ namespace Web_Bank.Pages.CustomerAccounts
                         Id = customer.Id,
                         Givenname = customer.Givenname,
                         Surname = customer.Surname,
-                        Accounts = customer.Accounts
+                        Accounts = customer.Accounts,
+                        photo = $"https://ui-avatars.com/api/?background=random&name={customer.Surname}+{customer.Givenname}"
+
                     };
                     Total = customer.Accounts.Sum(a => a.Balance);
                     
@@ -70,7 +72,8 @@ namespace Web_Bank.Pages.CustomerAccounts
                             Id = customer.Id,
                             Givenname = customer.Givenname,
                             Surname = customer.Surname,
-                            Accounts = customer.Accounts
+                            Accounts = customer.Accounts,
+                            photo = $"https://ui-avatars.com/api/?background=random&name={customer.Surname}+{customer.Givenname}"
                         };
                         Total = ((int)customer.Accounts.Sum(a => a.Balance));
                     }
@@ -81,7 +84,8 @@ namespace Web_Bank.Pages.CustomerAccounts
                             Id = customer.Id,
                             Givenname = customer.Givenname,
                             Surname = customer.Surname,
-                            Accounts = customer.Accounts
+                            Accounts = customer.Accounts,
+                            photo = $"https://ui-avatars.com/api/?background=random&name={customer.Surname}+{customer.Givenname}"
                         };
                         Total = ((int)customer.Accounts.Sum(a => a.Balance));
                     }

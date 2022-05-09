@@ -142,6 +142,7 @@ namespace Web_Bank.Pages.CustomerAccounts
             }
             else
             {
+                CustomerId = customerId;    
                 GetAccounts(customerId);
                 GetOperations();
                 return Page();

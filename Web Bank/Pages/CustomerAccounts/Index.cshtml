@@ -5,6 +5,12 @@
 @{
 }
 <div class="container-fluid px-4">
+    
+    <div class="row justify-content-between">
+        <div class="col-6 col-md-6 mt-4">            
+            <img  src="@Model.ViewModelAccounts.photo" height="100" width="100" alt="" class="rounded-circle" />
+        </div>        
+    </div>
     <h1 class="mt-4">@Model.ViewModelAccounts.Surname @Model.ViewModelAccounts.Givenname</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item active">Customer's Number: @Model.ViewModelAccounts.Id</li>
@@ -32,6 +38,7 @@
     <div class="row">
         @foreach (var item in @Model.ViewModelAccounts.Accounts)
         {
+            
             <div class="col-xl-4 col-md-6">
             <div class="card text-center mb-4">
                 <div class="card-header bg-info">
