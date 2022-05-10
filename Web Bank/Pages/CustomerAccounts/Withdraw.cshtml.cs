@@ -95,13 +95,11 @@ namespace Web_Bank.Pages.CustomerAccounts
         public async Task<IActionResult> OnPostUpdateAsync(int accountId, int amount, int customerId)
         {
             if (ModelState.IsValid)
-            {
-                if (_transactionService.CanWithdraw(accountId, amount))
-                {
-                    await _transactionService.WithdrawAsync(accountId, amount);
-                    return RedirectToPage("./Transactions", new {CustomerId = customerId, accountId = accountId });
-                }                           
+            {  
                 
+                await _transactionService.WithdrawAsync(accountId, amount);
+                return RedirectToPage("./Transactions", new {CustomerId = customerId, accountId = accountId });
+                                                         
             }
             else
             {

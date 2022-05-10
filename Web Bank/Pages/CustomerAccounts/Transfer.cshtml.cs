@@ -97,11 +97,10 @@ namespace Web_Bank.Pages.CustomerAccounts
         {
             if (ModelState.IsValid)
             {
-                if (_transactionService.CanTransfer(accountIdfrom, accountIdto, amount))
-                {
-                    await _transactionService.TransferAsync(accountIdfrom, accountIdto, amount);
-                    return RedirectToPage("./Transactions", new {customerId = customerId, accountId = accountIdfrom });
-                }
+
+                await _transactionService.TransferAsync(accountIdfrom, accountIdto, amount);
+                return RedirectToPage("./Transactions", new {customerId = customerId, accountId = accountIdfrom });
+                
 
             }
             else

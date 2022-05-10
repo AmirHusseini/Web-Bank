@@ -29,7 +29,25 @@ namespace Web_Bank.Services
         public async Task WithdrawAsync(int accountId, int amount)
         {
             var account = await _dbContext.Accounts.Include(t => t.Transactions).FirstOrDefaultAsync(a => a.Id == accountId);
-            if (account != null)
+            
+            if (account == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            else if (amount <= 0)
+            {
+
+                throw new ArgumentException("Amount can not be null or negative.");
+
+            }
+
+            else if (amount > account.Balance)
+            {
+                throw new ArgumentException("Amount is more than balance.");
+            }
+
+            else
             {
                 account.Balance -= amount;
 
@@ -46,58 +64,27 @@ namespace Web_Bank.Services
                  await _dbContext.SaveChangesAsync();
             }      
             
-        }
-        public bool CanWithdraw(int accountId, int amount)
-        {
-            var account = _dbContext.Accounts.FirstOrDefault(a => a.Id == accountId);
-            if (account == null)
-            {
-                throw new NotImplementedException();
-            }
-            if (amount <= 0)
-            {
-                
-                return false;
-
-            }
-            else if (account.Balance < amount)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-
-        }
-
-        public bool CanDeposit(string operation, int accountId, int amount)
-        {
-            var account = _dbContext.Accounts.FirstOrDefault(a => a.Id == accountId);
-            if (account == null)
-            {
-                throw new NotImplementedException();
-            }
-            if (amount <= 0)
-            {
-
-                return false;
-
-            }
-            else if (operation == null)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
+        }                
 
         public async Task DepositAsync(string operation, int accountId, int amount)
         {
             var account = await _dbContext.Accounts.Include(t => t.Transactions).FirstOrDefaultAsync(a => a.Id == accountId);
-            if (account != null)
+            if (account == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            else if (amount <= 0)
+            {
+
+                throw new ArgumentException("Amount can not be null or negative.");
+
+            }
+            else if (operation == null)
+            {
+                throw new ArgumentNullException();
+            }
+            else
             {
                 account.Balance += amount;
 
@@ -112,36 +99,30 @@ namespace Web_Bank.Services
 
                 account.Transactions.Add(transaction);
                 await _dbContext.SaveChangesAsync();
-            }
-        }
-
-        public bool CanTransfer(int accountIdfrom, int accountIdto, int amount)
-        {
-            var accountfrom = _dbContext.Accounts.FirstOrDefault(a => a.Id == accountIdfrom);
-            var accountto = _dbContext.Accounts.FirstOrDefault(a => a.Id == accountIdto);
-
-            if (accountfrom == null || accountto == null)
-            {
-                throw new NotImplementedException();
-            }
-            if (amount <= 0 || amount > accountfrom.Balance)
-            {
-
-                return false;
-
             }            
-            else
-            {
-                return true;
-            }
         }
 
         public async Task TransferAsync(int accountIdfrom, int accountIdto, int amount)
         {
             var accountfrom = await _dbContext.Accounts.Include(t => t.Transactions).FirstOrDefaultAsync(a => a.Id == accountIdfrom);
             var accountto = await _dbContext.Accounts.Include(t => t.Transactions).FirstOrDefaultAsync(a => a.Id == accountIdto);
-            
-            if (accountfrom != null && accountto != null)
+
+            if (accountfrom == null || accountto == null)
+            {
+                throw new NotImplementedException();
+            }
+            else if (amount <= 0)
+            {
+
+                throw new ArgumentException("Amount can not be null or negative.");
+
+            }
+            else if (amount > accountfrom.Balance)
+            {
+                throw new ArgumentException("Amount is more than balance.");
+            }
+
+            else
             {
                 accountto.Balance += amount;
 
@@ -169,15 +150,6 @@ namespace Web_Bank.Services
                 await _dbContext.SaveChangesAsync();
             }
         }
-
-        public enum ErrorCode
-        {
-            // credit= pllus , debit = minus
-
-            Ok,
-            BalanceTooLow,
-            AmountIsNegative,
-
-        }
+       
     }
 }

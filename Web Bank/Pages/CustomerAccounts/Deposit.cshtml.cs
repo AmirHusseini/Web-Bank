@@ -133,11 +133,10 @@ namespace Web_Bank.Pages.CustomerAccounts
                 {
                     operationId = "Deposit Cash";
                 }
-                if (_transactionService.CanDeposit(operationId, accountId, amount))
-                {
-                    await _transactionService.DepositAsync(operationId, accountId, amount);
-                    return RedirectToPage("./Transactions", new { customerId = customerId, accountId = accountId });
-                }
+                
+                await _transactionService.DepositAsync(operationId, accountId, amount);
+                return RedirectToPage("./Transactions", new { customerId = customerId, accountId = accountId });
+               
 
             }
             else
