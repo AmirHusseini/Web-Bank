@@ -75,7 +75,7 @@ namespace UnitTest
             var result = await Assert.ThrowsExceptionAsync<ArgumentException>(() =>  _transactionService.WithdrawAsync(account.Id, amount));
 
             //Assert
-            Assert.AreEqual("Amount can not be null or negative.", result.Message);
+            Assert.AreEqual($"Amount {amount} can not be null or negative.", result.Message);
 
         }
         [TestMethod]
@@ -99,7 +99,7 @@ namespace UnitTest
             var result = await Assert.ThrowsExceptionAsync<ArgumentException>(() => _transactionService.WithdrawAsync(account.Id, amount));
 
             //Assert
-            Assert.AreEqual("Amount can not be null or negative.", result.Message);
+            Assert.AreEqual($"Amount {amount} can not be null or negative.", result.Message);
 
         }
 
@@ -124,7 +124,7 @@ namespace UnitTest
             var result = await Assert.ThrowsExceptionAsync<ArgumentException>(() => _transactionService.WithdrawAsync(account.Id, amount));
 
             //Assert
-            Assert.AreEqual("Amount is more than balance.", result.Message);
+            Assert.AreEqual($"Amount {amount} $ is more than your current balance {((int)account.Balance)} $.", result.Message);
 
         }
 
@@ -180,7 +180,7 @@ namespace UnitTest
             var result = await Assert.ThrowsExceptionAsync<ArgumentException>(() => _transactionService.DepositAsync(operation, account.Id, amount));
 
             //Assert
-            Assert.AreEqual("Amount can not be null or negative.", result.Message);
+            Assert.AreEqual($"Amount {amount} can not be null or negative.", result.Message);
 
         }
         [TestMethod]
@@ -206,7 +206,7 @@ namespace UnitTest
             var result = await Assert.ThrowsExceptionAsync<ArgumentException>(() => _transactionService.DepositAsync(operation, account.Id, amount));
 
             //Assert
-            Assert.AreEqual("Amount can not be null or negative.", result.Message);
+            Assert.AreEqual($"Amount {amount} can not be null or negative.", result.Message);
 
         }
 
@@ -228,10 +228,10 @@ namespace UnitTest
             _dbContext.SaveChanges();
 
             //Act
-            var result = await Assert.ThrowsExceptionAsync<ArgumentNullException>(() => _transactionService.DepositAsync(operation, account.Id, amount));
+            var result = await Assert.ThrowsExceptionAsync<ArgumentException>(() => _transactionService.DepositAsync(operation, account.Id, amount));
 
             //Assert
-            Assert.AreEqual("Value cannot be null.", result.Message);
+            Assert.AreEqual("You have to choose an operation.", result.Message);
 
         }
 
@@ -337,6 +337,37 @@ namespace UnitTest
             Assert.AreEqual("Amount can not be null or negative.", result.Message);
 
         }
+        [TestMethod]
+        [DataRow(200)]
+        public async Task CanNotTransfer_IfAmountIsMoreThanBalance(int amount)
+        {
+            //Arrange
+            var accountfrom = new Account()
+            {
+                Id = 15,
+                AccountType = "Checking",
+                Balance = 150,
+                Created = DateTime.Now,
+                Transactions = new()
+            };
 
+            var accountto = new Account()
+            {
+                Id = 16,
+                AccountType = "Checking",
+                Balance = 150,
+                Created = DateTime.Now,
+                Transactions = new()
+            };
+            _dbContext.Accounts.AddRange(accountfrom, accountto);
+            _dbContext.SaveChanges();
+
+            //Act
+            var result = await Assert.ThrowsExceptionAsync<ArgumentException>(() => _transactionService.WithdrawAsync(accountfrom.Id, amount));
+
+            //Assert
+            Assert.AreEqual($"Amount {amount} $ is more than your current balance {((int)accountfrom.Balance)} $.", result.Message);
+
+        }
     }
 }

@@ -120,32 +120,31 @@ namespace Web_Bank.Pages.CustomerAccounts
         }
         public async Task<IActionResult> OnPostUpdateAsync(string operationId, int accountId, int amount, int customerId)
         {
-            if (operationId == "Select your operation")
-            {
-                ModelState.AddModelError("OperationId", "You must choose an option");
-                GetAccounts(customerId);
-                GetOperations();
-                return Page();
-            }
+            
             if (ModelState.IsValid)
             {
-                if (operationId == "Depositcash")
+                try
                 {
-                    operationId = "Deposit Cash";
+                    await _transactionService.DepositAsync(operationId, accountId, amount);
+                    return RedirectToPage("./Transactions", new { customerId = customerId, accountId = accountId });
                 }
-                
-                await _transactionService.DepositAsync(operationId, accountId, amount);
-                return RedirectToPage("./Transactions", new { customerId = customerId, accountId = accountId });
-               
+                catch (Exception ex)
+                {
+
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                    CustomerId = customerId;
+                    GetAccounts(customerId);
+                    GetOperations();
+
+                    return Page();
+                }                                              
 
             }
-            else
-            {
-                CustomerId = customerId;    
-                GetAccounts(customerId);
-                GetOperations();
-                return Page();
-            }
+
+            CustomerId = customerId;
+            GetAccounts(customerId);
+            GetOperations();
+
             return Page();
 
 

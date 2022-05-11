@@ -97,18 +97,25 @@ namespace Web_Bank.Pages.CustomerAccounts
         {
             if (ModelState.IsValid)
             {
+                try
+                {
+                    await _transactionService.TransferAsync(accountIdfrom, accountIdto, amount);
+                    return RedirectToPage("./Transactions", new { customerId = customerId, accountId = accountIdfrom });
 
-                await _transactionService.TransferAsync(accountIdfrom, accountIdto, amount);
-                return RedirectToPage("./Transactions", new {customerId = customerId, accountId = accountIdfrom });
+                }
+                catch (Exception ex)
+                {
+
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                    CustomerId = customerId;
+                    GetAccounts(customerId);
+                    return Page();
+                }
                 
+            }
 
-            }
-            else
-            {
-                CustomerId = customerId;
-                GetAccounts(customerId);
-                return Page();
-            }
+            CustomerId = customerId;
+            GetAccounts(customerId);
             return Page();
 
 

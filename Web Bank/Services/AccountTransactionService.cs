@@ -38,13 +38,13 @@ namespace Web_Bank.Services
             else if (amount <= 0)
             {
 
-                throw new ArgumentException("Amount can not be null or negative.");
+                throw new ArgumentException($"Amount {amount} can not be null or negative.");
 
             }
 
             else if (amount > account.Balance)
             {
-                throw new ArgumentException("Amount is more than balance.");
+                throw new ArgumentException($"Amount {amount} $ is more than your current balance {((int)account.Balance)} $.");
             }
 
             else
@@ -57,7 +57,7 @@ namespace Web_Bank.Services
                     Date = DateTime.Now,
                     NewBalance = account.Balance,
                     Operation = "ATM withdrawal",
-                    Type = "Credit" //kam shode faghat esme operation awaz mishe
+                    Type = "Credit" 
                 };
                             
                  account.Transactions.Add(transaction);
@@ -77,15 +77,19 @@ namespace Web_Bank.Services
             else if (amount <= 0)
             {
 
-                throw new ArgumentException("Amount can not be null or negative.");
+                throw new ArgumentException($"Amount {amount} can not be null or negative.");
 
             }
-            else if (operation == null)
+            else if (operation == "Select your operation" || operation == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentException("You have to choose an operation.");
             }
             else
             {
+                if (operation == "Depositcash")
+                {
+                    operation = "Deposit Cash";
+                }
                 account.Balance += amount;
 
                 var transaction = new Transaction
@@ -119,7 +123,7 @@ namespace Web_Bank.Services
             }
             else if (amount > accountfrom.Balance)
             {
-                throw new ArgumentException("Amount is more than balance.");
+                throw new ArgumentException($"Amount {amount} $ is more than your current balance {((int)accountfrom.Balance)} $.");
             }
 
             else

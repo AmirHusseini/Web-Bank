@@ -31,7 +31,7 @@ namespace Web_Bank.Pages.CustomerAccounts
         [Range(1, int.MaxValue, ErrorMessage = "You have to choose an option")]        
         public int AccountId { get; set; }
 
-        public int CustomerId { get; set; }
+        public int CustomerId { get; set; }        
 
         public List<SelectListItem> Accounts { get; set; }
         
@@ -95,18 +95,26 @@ namespace Web_Bank.Pages.CustomerAccounts
         public async Task<IActionResult> OnPostUpdateAsync(int accountId, int amount, int customerId)
         {
             if (ModelState.IsValid)
-            {  
-                
-                await _transactionService.WithdrawAsync(accountId, amount);
-                return RedirectToPage("./Transactions", new {CustomerId = customerId, accountId = accountId });
-                                                         
-            }
-            else
             {
-                CustomerId = customerId;
-                GetAccounts(customerId);
-                return Page();
+                try
+                {
+                    await _transactionService.WithdrawAsync(accountId, amount);
+                    return RedirectToPage("./Transactions", new { CustomerId = customerId, accountId = accountId });
+                }
+                
+                
+                catch (Exception ex)
+                {
+                    
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                    CustomerId = customerId;
+                    GetAccounts(customerId);
+                    return Page();
+                }
             }
+
+            CustomerId = customerId;
+            GetAccounts(customerId);
             return Page();
 
 
