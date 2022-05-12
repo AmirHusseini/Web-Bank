@@ -41,7 +41,8 @@ public class DataInitializer
     private void SeedUsers()
     {
         AddUserIfNotExists("stefan.holmberg@systementor.se", "Hejsan123#", new string[] { "Admin" });
-        AddUserIfNotExists("stefan.holmberg@customer.systementor.se", "Hejsan123#", new string[] { "Customer" });
+        AddUserIfNotExists("stefan.holmberg@customer.systementor.se", "Hejsan123#", new string[] { "Cashier" });
+        AddUserIfNotExists("Susie_Karlsson@yahoo.com", "Susie_Karlsson@1", new string[] { "Customer" });
     }
 
 
@@ -49,6 +50,7 @@ public class DataInitializer
     {
         AddRoleIfNotExisting("Admin");
         AddRoleIfNotExisting("Customer");
+        AddRoleIfNotExisting("Cashier");
     }
 
     private void AddRoleIfNotExisting(string roleName)

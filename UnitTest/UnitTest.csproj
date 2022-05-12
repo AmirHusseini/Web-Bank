@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Web Bank\Web Bank.csproj" />
+    <ProjectReference Include="..\Web Bank\Web_Bank.csproj" />
   </ItemGroup>
 
 </Project>
