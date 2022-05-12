@@ -44,6 +44,16 @@ namespace Web_Bank.Pages.Customer
                 };
                 _dbContext.Customers.Add(newcustomer);
 
+                newcustomer.Accounts.Add(
+                    new Account()
+                    {
+                        AccountType = "Saving",
+                        Balance = 10,
+                        Created = DateTime.Now,
+                        Transactions = new()
+
+                    });
+
                 await _dbContext.SaveChangesAsync();
                 return RedirectToPage("./Index");
                 

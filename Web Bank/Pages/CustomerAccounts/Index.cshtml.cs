@@ -12,7 +12,7 @@ using Web_Bank.ViewModels;
 namespace Web_Bank.Pages.CustomerAccounts
 {
     //[Authorize]
-    
+    [BindProperties]
     public class IndexModel : PageModel
     {
         
@@ -24,10 +24,10 @@ namespace Web_Bank.Pages.CustomerAccounts
             _dbContext = context;
             _signInManager = signInManager;
         }
-
+        public int CustomerId { get; set; }
         public CustomerAccountViewModel ViewModelAccounts { get; set; }
         public decimal Total { get; set; }
-
+        public string AccountType { get; set; } 
         public async Task<IActionResult> OnGetAsync(int? customerId)
         {
             if (customerId == null && _signInManager.IsSignedIn(User))
@@ -104,6 +104,7 @@ namespace Web_Bank.Pages.CustomerAccounts
 
             }
             return Page();
-        }    
+        }
+        
     }
 }

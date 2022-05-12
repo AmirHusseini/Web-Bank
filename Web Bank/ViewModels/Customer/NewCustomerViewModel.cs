@@ -40,16 +40,13 @@ namespace Web_Bank.ViewModels
         public string CountryCode { get; set; }
 
         [Required]
-        [StringLength(13, MinimumLength = 13)]
         public string NationalId { get; set; }
 
         [Display(Name = "Telephone Country Code")]
         [Required]
-        [StringLength(6, MinimumLength = 1)]
         public int TelephoneCountryCode { get; set; }
 
         [Required]
-        [DataType(DataType.PhoneNumber)]
         public string Telephone { get; set; }
 
         [Display(Name = "Email Address")]
