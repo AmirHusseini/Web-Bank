@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Web_Bank.Data;
 using Web_Bank.Data.IdentityManager.Admin;
@@ -62,13 +63,10 @@ namespace Web_Bank.Pages.Admin
             var items = new List<ManageUserRoles>();
             userId = nuserId;
             var user = await _userManager.FindByIdAsync(nuserId);
-            if (user != null)
-            {
 
+            var roles = await _roleManager.Roles.ToListAsync();
 
-            }
-
-            foreach (var role in _roleManager.Roles)
+            foreach (var role in roles)
             {
                 var userRolesViewModel = new ManageUserRoles
                 {
